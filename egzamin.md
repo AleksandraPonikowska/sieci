@@ -128,7 +128,7 @@
 - Wykrywanie MTU dla ścieżki / NIE
 - Zatruwanie ścieżki / TAK
 
-## Pytanie 22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:
+## 22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:
 - wymaga komunikatów kontrolnych wysyłanych przez routery / NIE
 - zakłada, że utrata pakietów nastąpiła na skutek przepełnienia kolejek / TAK
 - zakłada, że utrata pakietów nastąpiła na skutek błędów warstwy fizycznej / NIE

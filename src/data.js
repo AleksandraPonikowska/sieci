@@ -171,26 +171,26 @@ export const exams = {
       "odp": true
     },
     {
-      "id": "2019-7-e",
-      "pytanie": "7. Które z poniższych zdań są prawdziwe w przypadku protokołu TCP?",
+      "id": "2019-8-a",
+      "pytanie": "8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?",
       "odpowiedz": "Lokalny port",
       "odp": true
     },
     {
-      "id": "2019-7-f",
-      "pytanie": "7. Które z poniższych zdań są prawdziwe w przypadku protokołu TCP?",
+      "id": "2019-8-b",
+      "pytanie": "8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?",
       "odpowiedz": "Zdalny adres IP",
       "odp": true
     },
     {
-      "id": "2019-7-g",
-      "pytanie": "7. Które z poniższych zdań są prawdziwe w przypadku protokołu TCP?",
+      "id": "2019-8-c",
+      "pytanie": "8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?",
       "odpowiedz": "MTU",
       "odp": false
     },
     {
-      "id": "2019-7-h",
-      "pytanie": "7. Które z poniższych zdań są prawdziwe w przypadku protokołu TCP?",
+      "id": "2019-8-d",
+      "pytanie": "8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?",
       "odpowiedz": "Rozmiar okna",
       "odp": false
     },
