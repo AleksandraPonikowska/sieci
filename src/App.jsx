@@ -70,7 +70,8 @@ export default function App() {
 function HomeView({ onSelect }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-slate-50">
-      <h1 className="text-3xl font-black text-slate-800 mb-8 text-center">Kocham sieci, zdam sieci</h1>
+      <img src = "https://i.redd.it/37jy75omn10e1.gif"></img>
+      <h1 className="mt-6 text-3xl font-black text-slate-800 mb-8 text-center">Kocham sieci, zdam sieci</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl">
         {Object.keys(exams).map(year => (
           <button key={year} onClick={() => onSelect(year)} className="p-6 bg-white rounded-2xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all text-xl font-bold text-blue-600">
