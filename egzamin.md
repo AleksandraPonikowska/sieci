@@ -55,10 +55,10 @@
 - 255.255.0.0 / NIE
 
 ## 10. Które zdania dotyczące współczesnych wersji protokołu HTTP są prawdziwe?
-- Wykorzystuje protokół UDP / NIE
-- Typem MIME dla wysyłanej strony HTML jest text/plain / NIE
-- Serwer korzysta z portu 80 / TAK
-- Pliki do serwera można wysyłać korzystając z metody GET / NIE
+- Wykorzystuje protokół UDP / NIE / Klasyczne i najczęściej omawiane wersje HTTP (1.1 oraz 2) opierają się na niezawodnym protokole TCP, który gwarantuje, że dane dotrą w całości.
+- Typem MIME dla wysyłanej strony HTML jest text/plain / NIE / Właściwy typ MIME, który mówi przeglądarce "to jest strona internetowa, wyrenderuj ją", to text/html. Z kolei text/plain to czysty tekst – przeglądarka wyświetliłaby po prostu surowy kod źródłowy zamiast ładnej strony.
+- Serwer korzysta z portu 80 / TAK / Port 80 to od lat standardowy, domyślny port dla klasycznej (nieszyfrowanej) komunikacji HTTP.
+- Pliki do serwera można wysyłać korzystając z metody GET / NIE / Metoda GET służy do pobierania danych z serwera. Dodatkowo umieszcza ona parametry w samym adresie URL (co ma bardzo rygorystyczne limity pojemności). Do przesyłania większych paczek danych, w tym plików, służy metoda POST (lub PUT), która ukrywa zawartość w tzw. ciele (body) żądania.
 
 ## 11. Komputer z prywatnym adresem IP 192.168.0.10 wysłał datagram UDP pod adres 22.22.22.22 do portu 53 i datagram UDP pod adres 33.33.33.33 do portu 123. W obu przypadkach źródłowym numerem portu był 12345. Pośredniczący router z funkcją NAT zamienił w obu przypadkach adres źródłowy na 11.11.11.11:34567.
 - Router może być ograniczonym asymetrycznym (restricted cone) NAT / TAK
@@ -159,10 +159,10 @@
 - /28 / TAK
 
 ## 27. W jakich warstwach są używane poniższe mechanizmy?
-- Nawiązywanie połączenia stosowane jest w warstwie transportowej / TAK
-- Typ MIME stosowany jest w warstwie sieciowej / NIE
-- Kontrola przepływu stosowana jest w warstwie sieciowej / NIE
-- Routing stosowany jest w warstwie łącza danych / NIE
+- Nawiązywanie połączenia stosowane jest w warstwie transportowej / TAK / Za nawiązywanie połączeń odpowiada warstwa transportowa (np. protokół TCP), która ustala zasady komunikacji przed wysłaniem właściwych danych (tzw. 3-way handshake).
+- Typ MIME stosowany jest w warstwie sieciowej / NIE / Typ MIME (np. text/html czy image/jpeg) określa format pliku i działa w warstwie aplikacji. Warstwy sieciowej (protokołu IP) nie interesuje, co znajduje się wewnątrz przesyłanego pakietu.
+- Kontrola przepływu stosowana jest w warstwie sieciowej / NIE / Hamowanie zbyt szybkiego nadawcy to zadanie warstwy transportowej (np. TCP) lub łącza danych. Warstwa sieciowa po prostu przesyła pakiety w trybie "najlepiej jak potrafi".
+- Routing stosowany jest w warstwie łącza danych / NIE / Wyznaczanie trasy dla pakietów (routing) to kluczowe zadanie warstwy sieciowej (wykorzystuje routery i adresy IP).
 
 
 ## 28. Jakie informacje są zawarte w nagłówku TCP?
@@ -193,10 +193,10 @@
 
 
 ## 32. Które zdania dotyczące protokołu DNS są prawdziwe?
-- DNS służy tylko do zamiany nazw domen na adresy IP, do zamiany adresów IP na nazwy domen wykorzystywany jest odrębny protokół / NIE
-- Jedna domena może mieć przypisanych wiele adresów IP / TAK
-- Rekord NS umożliwia określenie serwera nazw odpowiedzialnego za daną domenę / TAK
-- Strefą jest dowolny podzbiór zbioru nazw domen / NIE
+- DNS służy tylko do zamiany nazw domen na adresy IP, do zamiany adresów IP na nazwy domen wykorzystywany jest odrębny protokół / NIE / Służy do tego tzw. Odwrotny DNS (Reverse DNS), który wciąż jest częścią tego samego protokołu. Wykorzystuje się w nim rekordy PTR (Pointer Records)
+- Jedna domena może mieć przypisanych wiele adresów IP / TAK / Giganci jak Netflix czy Google muszą mieć kilka serwerów i rozkładają obciążenie między nimi (DNS Round Robin)
+- Rekord NS umożliwia określenie serwera nazw odpowiedzialnego za daną domenę / TAK / NS - name server
+- Strefą jest dowolny podzbiór zbioru nazw domen / NIE / Strefą jest spójny podzbiór
 
 
 ## 33. W typowej kryptografii asymetrycznej:
@@ -224,11 +224,11 @@
 - Komputer B może wysłać segment z danymi już po otrzymaniu pierwszego segmentu z ustawionym bitem RST / NIE
 - Komputer A może wysłać segment z danymi dopiero po otrzymaniu pierwszego segmentu z danymi od B / NIE
 
-## 37. Jakie wiążą poprawę wydajności komunikacji za pośrednictwem protokołu HTTP?
-- Zapytania ARP / NIE
-- Sender Policy Framework (SPF) / NIE
-- Sieci CDN / TAK
-- Połączenia trwałe (wiele komunikatów HTTP w jednym połączeniu TCP) / TAK
+## 37. Jakie rozwiązania poprawiają wydajności komunikacji za pośrednictwem protokołu HTTP?
+- Zapytania ARP / NIE / Protokół ARP działa w niższych warstwach i służy do zamiany adresów IP na adresy fizyczne MAC w sieci lokalnej.
+- Sender Policy Framework (SPF) / NIE / SPF to mechanizm zabezpieczający pocztę e-mail (korzysta z rekordów TXT w DNS, aby zapobiegać podszywaniu się pod nadawcę).
+- Sieci CDN / TAK / CDN (Content Delivery Network) to rozproszone sieci serwerów, które przechowują kopie plików strony (np. grafiki, skrypty) blisko użytkownika końcowego. Dzięki temu dane pokonują krótszą drogę, co drastycznie poprawia czas ładowania stron HTTP.
+- Połączenia trwałe (wiele komunikatów HTTP w jednym połączeniu TCP) / TAK / Standardowo każde zapytanie HTTP wymagałoby nawiązania nowego połączenia TCP (co zajmuje czas i zasoby). Mechanizm Keep-Alive (połączenia trwałe) pozwala pobrać wiele elementów strony (np. plik HTML, CSS i obrazki) w ramach raz otwartego "tunelu", co znacząco przyspiesza komunikację.
 
 ## 38. Które zdania dotyczące protokołu CSMA/CD są prawdziwe?
 - Jest wykorzystywany w sieciach bezprzewodowych / NIE
