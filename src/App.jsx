@@ -60,7 +60,7 @@ export default function App() {
   if (view === 'menu') return <MenuView examId={selectedExam} onBack={goHome} onBrowse={() => setView('browse')} onTest={() => setView('testConfig')} />;
   if (view === 'browse') return <BrowseView examId={selectedExam} progress={progress} updateProgress={updateProgress} updateGroupProgress={updateGroupProgress} clearProgress={() => clearExamProgress(selectedExam)} onBack={() => setView('menu')} />;
   if (view === 'testConfig') return <TestConfigView examId={selectedExam} progress={progress} clearProgress={() => clearExamProgress(selectedExam)} onBack={() => setView('menu')} onStart={(config) => { setTestConfig(config); setView('testActive'); }} />;
-  if (view === 'testActive') return <TestActiveView examId={selectedExam} config={testConfig} progress={progress} updateProgress={updateProgress} onFinish={() => setView('menu')} onBack={() => setView('menu')} />;
+  if (view === 'testActive') return <TestActiveView examId={selectedExam} config={testConfig} progress={progress} updateProgress={updateProgress} updateGroupProgress={updateGroupProgress} onFinish={() => setView('menu')} onBack={() => setView('menu')} />;
 
   return null;
 }
@@ -70,8 +70,8 @@ export default function App() {
 function HomeView({ onSelect }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-slate-50">
-      <img src = "https://i.redd.it/37jy75omn10e1.gif"></img>
-      <h1 className="mt-6 text-3xl font-black text-slate-800 mb-8 text-center">Kocham sieci, zdam sieci</h1>
+      <img src="https://i.redd.it/37jy75omn10e1.gif" alt="Zdam to" className="rounded-xl shadow-sm max-w-full h-auto mb-4" />
+      <h1 className="mt-2 text-3xl font-black text-slate-800 mb-8 text-center">Kocham sieci, zdam sieci</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl">
         {Object.keys(exams).map(year => (
           <button key={year} onClick={() => onSelect(year)} className="p-6 bg-white rounded-2xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all text-xl font-bold text-blue-600">
@@ -103,9 +103,11 @@ function MenuView({ examId, onBack, onBrowse, onTest }) {
 }
 
 function BrowseView({ examId, progress, updateProgress, updateGroupProgress, clearProgress, onBack }) {
-  const groupedQuestions = exams[examId].reduce((acc, curr) => {
-    if (!acc[curr.pytanie]) acc[curr.pytanie] = [];
-    acc[curr.pytanie].push(curr);
+  // Grupowanie po ID logicznego pytania, np. z "2019-34-b" robimy "2019-34"
+  const groupedMap = exams[examId].reduce((acc, curr) => {
+    const groupKey = curr.id.split('-').slice(0, 2).join('-');
+    if (!acc[groupKey]) acc[groupKey] = { title: curr.pytanie, items: [] };
+    acc[groupKey].items.push(curr);
     return acc;
   }, {});
 
@@ -120,14 +122,15 @@ function BrowseView({ examId, progress, updateProgress, updateGroupProgress, cle
       <TopNavigation onBack={onBack} backText="Menu Egzaminu" rightContent={rightAction} />
       <main className="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-6">
         <div className="space-y-6">
-          {Object.entries(groupedQuestions).map(([groupName, groupQ]) => {
+          {Object.entries(groupedMap).map(([gKey, groupData]) => {
+            const groupQ = groupData.items;
             const groupIds = groupQ.map(q => q.id);
             const allKnown = groupQ.every(q => progress[q.id] === 'known');
 
             return (
-              <div key={groupName} className={`rounded-xl border transition-all shadow-sm ${allKnown ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 bg-white'}`}>
-                <div className="bg-slate-50 border-b border-slate-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-800 whitespace-pre-wrap flex-1">{groupName}</h3>
+              <div key={gKey} className={`rounded-xl border transition-all shadow-sm ${allKnown ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 bg-white'}`}>
+                <div className="bg-slate-50 border-b border-slate-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-t-xl">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-800 whitespace-pre-wrap flex-1">{groupData.title}</h3>
                   <div className="flex gap-2 w-full md:w-auto">
                     <button onClick={() => updateGroupProgress(groupIds, 'known')} className="flex-1 md:flex-none text-sm px-4 py-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-lg font-bold transition-colors">Umiem</button>
                     <button onClick={() => updateGroupProgress(groupIds, 'unknown')} className="flex-1 md:flex-none text-sm px-4 py-2 bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-lg font-bold transition-colors">Nie umiem</button>
@@ -143,8 +146,6 @@ function BrowseView({ examId, progress, updateProgress, updateGroupProgress, cle
                           <p className="mt-2 font-bold text-xs">
                             Odpowiedź z klucza: <span className={`px-2 py-0.5 rounded ml-1 ${q.odp ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{q.odp ? "TAK" : "NIE"}</span>
                           </p>
-                          {/* WSKAZÓWKA W PRZEGLĄDARCE */}
-                          
                         </div>
                         <div className="flex gap-2 w-full sm:w-auto">
                           <button onClick={() => updateProgress(q.id, 'known')} className={`flex-1 sm:flex-none px-4 py-2 text-sm rounded-lg font-bold transition-colors ${status === 'known' ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50 hover:border-emerald-200'}`}>Umiem</button>
@@ -164,13 +165,36 @@ function BrowseView({ examId, progress, updateProgress, updateGroupProgress, cle
 }
 
 function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
-  const availableQuestions = exams[examId].filter(q => progress[q.id] !== 'known');
-  const availableCount = availableQuestions.length;
+  const [groupedMode, setGroupedMode] = useState(false);
   
-  const [roundSize, setRoundSize] = useState(Math.min(10, availableCount) || availableCount);
+  // Obliczenia dla trybu pojedynczego
+  const availableSingles = exams[examId].filter(q => progress[q.id] !== 'known');
+  const availableCountSingle = availableSingles.length;
+
+  // Obliczenia dla trybu grupowego
+  const groupedMap = {};
+  exams[examId].forEach(q => {
+    const gKey = q.id.split('-').slice(0, 2).join('-');
+    if (!groupedMap[gKey]) groupedMap[gKey] = [];
+    groupedMap[gKey].push(q);
+  });
+  const availableGroups = Object.values(groupedMap).filter(g => g.some(q => progress[q.id] !== 'known'));
+  const availableCountGrouped = availableGroups.length;
+
+  // Realna wartość zależnie od trybu
+  const availableCount = groupedMode ? availableCountGrouped : availableCountSingle;
+  
+  const [roundSize, setRoundSize] = useState(10);
   const [shuffle, setShuffle] = useState(true);
   const [autoAdvance, setAutoAdvance] = useState(true);
-  const [studyMode, setStudyMode] = useState(false); // NOWY STAN DLA TRYBU NAUKI
+  const [studyMode, setStudyMode] = useState(false);
+
+  // Bezpieczna aktualizacja roundSize przy zmianie trybu, żeby nie przeskoczyło zakresu
+  useEffect(() => {
+    if (availableCount > 0 && roundSize > availableCount) {
+      setRoundSize(availableCount);
+    }
+  }, [groupedMode, availableCount, roundSize]);
 
   if (availableCount === 0) {
     return (
@@ -193,15 +217,17 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
         <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-lg">
           <h2 className="text-xl font-black mb-3 text-slate-800">Konfiguracja Testu</h2>
           <div className="inline-block bg-blue-50 px-3 py-1.5 rounded-lg mb-6 border border-blue-100">
-            <p className="text-sm font-bold text-blue-700">Do nauki pozostało pytań: {availableCount}</p>
+            <p className="text-sm font-bold text-blue-700">
+              Do nauki pozostało {groupedMode ? "zadań" : "pytań (pojedynczych)"}: {availableCount}
+            </p>
           </div>
-          <label className="block text-sm font-bold text-slate-700 mb-2">Wybierz wielkość rundy:</label>
+          <label className="block text-sm font-bold text-slate-700 mb-2">Wybierz wielkość rundy {groupedMode ? "(ilość pełnych zadań)" : ""}:</label>
           <select value={roundSize} onChange={(e) => setRoundSize(Number(e.target.value))} className="w-full mb-5 bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm font-bold text-slate-800 outline-none focus:border-blue-500 focus:ring-2 ring-blue-100 transition-all cursor-pointer">
-              {availableCount >= 3 && <option value={3}>3 pytania</option>}
-            {availableCount >= 5 && <option value={5}>5 pytań</option>}
-            {availableCount >= 10 && <option value={10}>10 pytań</option>}
-            {availableCount >= 15 && <option value={15}>15 pytań</option>}
-            {availableCount >= 20 && <option value={20}>20 pytań</option>}
+            {availableCount >= 3 && <option value={3}>3 {groupedMode ? "zadania" : "pytania"}</option>}
+            {availableCount >= 5 && <option value={5}>5 {groupedMode ? "zadań" : "pytań"}</option>}
+            {availableCount >= 10 && <option value={10}>10 {groupedMode ? "zadań" : "pytań"}</option>}
+            {availableCount >= 15 && <option value={15}>15 {groupedMode ? "zadań" : "pytań"}</option>}
+            {availableCount >= 20 && <option value={20}>20 {groupedMode ? "zadań" : "pytań"}</option>}
             <option value={availableCount}>Wszystkie nieznane ({availableCount})</option>
           </select>
           
@@ -216,14 +242,18 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
               <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Automatyczne sprawdzanie odpowiedzi</label>
             </div>
 
-            {/* NOWY CHECKBOX - TRYB NAUKI */}
             <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 cursor-pointer" onClick={() => setStudyMode(!studyMode)}>
               <input type="checkbox" checked={studyMode} readOnly className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 pointer-events-none" />
               <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Tryb nauki (wyświetlaj wskazówki od razu)</label>
             </div>
+
+            <div className="flex items-center gap-3 bg-blue-50/50 p-3 rounded-lg border border-blue-200 cursor-pointer" onClick={() => setGroupedMode(!groupedMode)}>
+              <input type="checkbox" checked={groupedMode} readOnly className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 pointer-events-none" />
+              <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Tryb egzamin</label>
+            </div>
           </div>
 
-          <button onClick={() => onStart({ roundSize, shuffle, forceAll: false, autoAdvance, studyMode })} className="w-full py-3.5 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-[0.98]">
+          <button onClick={() => onStart({ roundSize, shuffle, forceAll: false, autoAdvance, studyMode, groupedMode })} className="w-full py-3.5 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-[0.98]">
             Rozpocznij rundę
           </button>
         </div>
@@ -232,60 +262,64 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
   );
 }
 
-function TestActiveView({ examId, config: initialConfig, progress, updateProgress, onFinish, onBack }) {
+function TestActiveView({ examId, config: initialConfig, progress, updateProgress, updateGroupProgress, onFinish, onBack }) {
   const [config, setConfig] = useState(initialConfig);
   const [queue, setQueue] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [userGuess, setUserGuess] = useState(null); 
-  const [roundStats, setRoundStats] = useState({ correct: 0, incorrect: 0 });
+  
+  const [userGuess, setUserGuess] = useState(null);
+  const [groupGuesses, setGroupGuesses] = useState({}); 
+  
+  // Zmodyfikowane statystyki, żeby obsługiwały zliczenia full (1pkt), half (0.5pkt), zero (0pkt) dla paska rundy
+  const [roundStats, setRoundStats] = useState({ correct: 0, incorrect: 0, score: 0, full: 0, half: 0, zero: 0 });
+  
   const [roundFinished, setRoundFinished] = useState(false);
   const [roundId, setRoundId] = useState(0); 
 
   useEffect(() => {
-    let qList = exams[examId];
-    if (!config.forceAll) {
-      qList = qList.filter(q => progress[q.id] !== 'known');
+    let finalQueue = [];
+
+    if (config.groupedMode) {
+      const grouped = {};
+      exams[examId].forEach(q => {
+        const gKey = q.id.split('-').slice(0, 2).join('-');
+        if (!grouped[gKey]) grouped[gKey] = [];
+        grouped[gKey].push(q);
+      });
+      let availableGroups = Object.values(grouped);
+      if (!config.forceAll) {
+        // Filtr: Grupa kwalifikuje się, jeśli CO NAJMNIEJ jedna składowa jest "nieznana"
+        availableGroups = availableGroups.filter(g => g.some(q => progress[q.id] !== 'known'));
+      }
+      if (config.shuffle) availableGroups.sort(() => Math.random() - 0.5);
+      finalQueue = availableGroups.slice(0, config.roundSize);
+    } else {
+      let qList = exams[examId];
+      if (!config.forceAll) {
+        qList = qList.filter(q => progress[q.id] !== 'known');
+      }
+      if (config.shuffle) qList.sort(() => Math.random() - 0.5);
+      finalQueue = qList.slice(0, config.roundSize);
     }
-    if (config.shuffle) qList.sort(() => Math.random() - 0.5);
     
-    const takeCount = Math.min(config.roundSize, qList.length);
-    setQueue(qList.slice(0, takeCount));
-    
+    setQueue(finalQueue);
     setCurrentIndex(0);
     setShowAnswer(false);
     setUserGuess(null);
-    setRoundStats({ correct: 0, incorrect: 0 });
+    setGroupGuesses({});
+    setRoundStats({ correct: 0, incorrect: 0, score: 0, full: 0, half: 0, zero: 0 });
     setRoundFinished(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [examId, config, roundId]);
 
-  const currentQ = queue[currentIndex];
+  const currentEntity = queue[currentIndex];
   
   const totalQuestions = exams[examId].length;
   const knownTotal = exams[examId].filter(q => progress[q.id] === 'known').length;
   const unknownTotal = exams[examId].filter(q => progress[q.id] === 'unknown').length;
   const unseenTotal = totalQuestions - knownTotal - unknownTotal;
   const remainingInExam = totalQuestions - knownTotal; 
-
-  const handleSelfEvaluation = (knewIt) => {
-    updateProgress(currentQ.id, knewIt ? 'known' : 'unknown');
-    setRoundStats(prev => ({ correct: prev.correct + (knewIt ? 1 : 0), incorrect: prev.incorrect + (!knewIt ? 1 : 0) }));
-    
-    if (currentIndex + 1 < queue.length) {
-      setCurrentIndex(curr => curr + 1);
-      setShowAnswer(false);
-      setUserGuess(null);
-    } else {
-      setRoundFinished(true);
-      if (((roundStats.correct + (knewIt ? 1 : 0)) / queue.length) >= 0.8) confetti();
-    }
-  };
-
-  const handleGuess = (guess) => {
-    setUserGuess(guess);
-    setShowAnswer(true);
-  };
 
   const renderProgressBar = (known, unknown, total) => {
     const knownPct = (known / total) * 100 || 0;
@@ -301,8 +335,25 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     );
   };
 
+  // Specjalny trójkolorowy pasek dla trybu grupowego w ramach obecnej rundy
+  const renderGroupedRoundProgressBar = (full, half, zero, total) => {
+    const fullPct = (full / total) * 100 || 0;
+    const halfPct = (half / total) * 100 || 0;
+    const zeroPct = (zero / total) * 100 || 0;
+    const unseenPct = 100 - fullPct - halfPct - zeroPct;
+    
+    return (
+      <div className="h-2 w-full bg-slate-100 rounded-full flex overflow-hidden">
+        <div style={{ width: `${fullPct}%` }} className="bg-emerald-500 transition-all duration-500"></div>
+        <div style={{ width: `${halfPct}%` }} className="bg-amber-400 transition-all duration-500"></div>
+        <div style={{ width: `${zeroPct}%` }} className="bg-rose-500 transition-all duration-500"></div>
+        <div style={{ width: `${unseenPct}%` }} className="bg-slate-200 transition-all duration-500"></div>
+      </div>
+    );
+  };
+
   if (roundFinished) {
-    const scorePct = Math.round((roundStats.correct / queue.length) * 100);
+    const scorePct = Math.round(((roundStats.score || 0) / queue.length) * 100);
     const isExamDone = remainingInExam === 0 && !config.forceAll;
     
     return (
@@ -317,6 +368,11 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
             <div className="text-5xl font-black mb-8" style={{ color: scorePct >= 50 ? '#059669' : '#e11d48' }}>
               {scorePct}%
             </div>
+            {config.groupedMode && (
+              <div className="text-sm font-bold text-slate-600 mb-8">
+                Punkty: {roundStats.score} / {queue.length}
+              </div>
+            )}
             
             <div className="flex flex-col gap-3">
               {isExamDone ? (
@@ -326,11 +382,11 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
               ) : (
                 <>
                   <button onClick={() => setRoundId(id => id + 1)} className="w-full py-3.5 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition-all active:scale-[0.99]">
-                    Następna runda ({Math.min(config.roundSize, remainingInExam)} pytań)
+                    Następna runda ({Math.min(config.roundSize, config.groupedMode ? Math.ceil(remainingInExam / 4) : remainingInExam)} {config.groupedMode ? "zadań" : "pytań"})
                   </button>
-                  {remainingInExam > config.roundSize && (
-                    <button onClick={() => { setConfig(prev => ({ ...prev, roundSize: remainingInExam })); setRoundId(id => id + 1); }} className="w-full py-3.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-xl font-bold text-sm hover:bg-blue-100 transition-colors">
-                      Dokończ resztę ({remainingInExam} pytań)
+                  {remainingInExam > (config.groupedMode ? config.roundSize * 4 : config.roundSize) && (
+                    <button onClick={() => { setConfig(prev => ({ ...prev, roundSize: config.groupedMode ? Math.ceil(remainingInExam / 4) : remainingInExam })); setRoundId(id => id + 1); }} className="w-full py-3.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-xl font-bold text-sm hover:bg-blue-100 transition-colors">
+                      Dokończ resztę
                     </button>
                   )}
                 </>
@@ -342,7 +398,7 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     );
   }
 
-  if (!currentQ) return null;
+  if (!currentEntity) return null;
 
   const rightStats = (
     <div className="text-xs font-black tracking-widest bg-slate-100 px-2.5 py-1 rounded-lg flex items-center">
@@ -354,106 +410,238 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     </div>
   );
 
+  // --- LOGIKA NORMALNA ---
+  if (!config.groupedMode) {
+    const currentQ = currentEntity;
+    const handleSelfEvaluation = (knewIt) => {
+      updateProgress(currentQ.id, knewIt ? 'known' : 'unknown');
+      setRoundStats(prev => ({
+        ...prev,
+        correct: prev.correct + (knewIt ? 1 : 0),
+        incorrect: prev.incorrect + (!knewIt ? 1 : 0),
+        score: (prev.score || 0) + (knewIt ? 1 : 0)
+      }));
+      
+      if (currentIndex + 1 < queue.length) {
+        setCurrentIndex(curr => curr + 1);
+        setShowAnswer(false);
+        setUserGuess(null);
+      } else {
+        setRoundFinished(true);
+        if ((((roundStats.score || 0) + (knewIt ? 1 : 0)) / queue.length) >= 0.8) confetti();
+      }
+    };
+
+    return (
+      <div className="min-h-screen flex flex-col bg-slate-50 h-[100dvh] overflow-hidden">
+        <TopNavigation onBack={onBack} backText="Przerwij" backIcon={<IconX />} rightContent={rightStats} />
+
+        <main className="flex-1 w-full max-w-3xl mx-auto p-4 flex flex-col gap-4 overflow-y-auto">
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 shrink-0">
+            <div>
+              <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
+                <span>Egzamin</span>
+                <span>{knownTotal + unknownTotal} / {totalQuestions}</span>
+              </div>
+              {renderProgressBar(knownTotal, unknownTotal, totalQuestions)}
+            </div>
+            <div>
+              <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
+                <span>Obecna runda</span>
+                <span>{currentIndex} / {queue.length}</span>
+              </div>
+              {renderProgressBar(roundStats.correct, roundStats.incorrect, queue.length)}
+            </div>
+          </div>
+
+          <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-auto">
+            <div className="mb-4 pb-4 border-b border-slate-100 shrink-0">
+              <p className="text-sm sm:text-base font-semibold text-slate-700 leading-snug">{currentQ.pytanie}</p>
+            </div>
+            <div className="mb-4 shrink-0">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">{currentQ.odpowiedz}</h3>
+            </div>
+            {currentQ.tip && (config.studyMode || showAnswer) && (
+              <div className="mb-4 p-3.5 bg-amber-50 border border-amber-200 text-amber-900 text-sm rounded-xl animate-fade-in shrink-0 flex gap-3">
+                <div>
+                  <span className="font-bold block mb-0.5 text-amber-800">Wskazówka:</span>
+                  <span className="text-amber-700">{currentQ.tip}</span>
+                </div>
+              </div>
+            )}
+            {!showAnswer ? (
+               <div className="mt-auto pt-4 flex flex-col gap-2">
+                 <div className="grid grid-cols-2 gap-3 w-full">
+                   <button onClick={() => { setUserGuess(true); setShowAnswer(true); }} className="py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all">TAK</button>
+                   <button onClick={() => { setUserGuess(false); setShowAnswer(true); }} className="py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all">NIE</button>
+                 </div>
+               </div>
+            ) : (
+              <div className="mt-auto pt-5 border-t border-slate-100 animate-fade-in flex flex-col items-center">
+                <div className="mb-6 text-center w-full bg-slate-50 p-4 rounded-xl">
+                  {userGuess === currentQ.odp ? (
+                    <div>
+                      <span className="block text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Poprawna odpowiedź!</span>
+                      <span className="text-2xl font-black text-emerald-500">{currentQ.odp ? "TAK" : "NIE"}</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="block text-xs font-bold text-rose-600 uppercase tracking-widest mb-1">Pomyłka</span>
+                      <div className="flex items-center justify-center gap-3 text-2xl font-black">
+                         <span className="text-rose-500 line-through opacity-60">{userGuess ? "TAK" : "NIE"}</span>
+                         <span className="text-slate-400 text-lg">➜</span>
+                         <span className="text-emerald-500">{currentQ.odp ? "TAK" : "NIE"}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {!config.autoAdvance ? (
+                  <>
+                    <span className="text-xs font-bold text-slate-500 mb-3 text-center">Zapisz wynik dla tej fiszki:</span>
+                    <div className="grid grid-cols-2 gap-3 w-full">
+                      <button onClick={() => handleSelfEvaluation(false)} className="py-3 bg-white border-2 border-rose-100 text-rose-600 font-bold text-sm rounded-xl hover:bg-rose-50 active:scale-95 transition-all">Byłem w błędzie</button>
+                      <button onClick={() => handleSelfEvaluation(true)} className="py-3 bg-white border-2 border-emerald-100 text-emerald-600 font-bold text-sm rounded-xl hover:bg-emerald-50 active:scale-95 transition-all">Znałem odpowiedź</button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="w-full">
+                    <button onClick={() => handleSelfEvaluation(userGuess === currentQ.odp)} className="w-full py-4 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-95">Dalej ➔</button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // --- LOGIKA GRUPOWA ---
+  const currentGroup = currentEntity;
+  const allAnswered = currentGroup.every(q => groupGuesses[q.id] !== undefined);
+
+  let groupCorrectCount = 0;
+  if (showAnswer) {
+    currentGroup.forEach(q => {
+      if (groupGuesses[q.id] === q.odp) groupCorrectCount++;
+    });
+  }
+
+  const handleGroupSelfEvaluation = (forceKnown) => {
+    let cCount = 0;
+    currentGroup.forEach(q => {
+      if (groupGuesses[q.id] === q.odp) cCount++;
+    });
+    
+    const isPerfect = cCount === currentGroup.length;
+    const isHalf = cCount === currentGroup.length - 1;
+    const points = isPerfect ? 1 : (isHalf ? 0.5 : 0);
+    // W auto-postępie - zalicza do "Umiem" tylko jeśli wszystkie bezbłędnie
+    const finalStatus = forceKnown !== null ? forceKnown : isPerfect; 
+
+    updateGroupProgress(currentGroup.map(q => q.id), finalStatus ? 'known' : 'unknown');
+
+    setRoundStats(prev => ({
+      ...prev,
+      full: prev.full + (isPerfect ? 1 : 0),
+      half: prev.half + (isHalf ? 1 : 0),
+      zero: prev.zero + (!isPerfect && !isHalf ? 1 : 0),
+      score: (prev.score || 0) + points
+    }));
+
+    if (currentIndex + 1 < queue.length) {
+      setCurrentIndex(curr => curr + 1);
+      setShowAnswer(false);
+      setGroupGuesses({});
+    } else {
+      setRoundFinished(true);
+      if ((((roundStats.score || 0) + points) / queue.length) >= 0.8) confetti();
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 h-[100dvh] overflow-hidden">
       <TopNavigation onBack={onBack} backText="Przerwij" backIcon={<IconX />} rightContent={rightStats} />
 
       <main className="flex-1 w-full max-w-3xl mx-auto p-4 flex flex-col gap-4 overflow-y-auto">
-        
-        {/* KOMPAKTOWE PASKI POSTĘPU */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 shrink-0">
           <div>
             <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
-              <span>Egzamin</span>
+              <span>Egzamin (pojedyncze pytania)</span>
               <span>{knownTotal + unknownTotal} / {totalQuestions}</span>
             </div>
             {renderProgressBar(knownTotal, unknownTotal, totalQuestions)}
           </div>
           <div>
             <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
-              <span>Obecna runda</span>
+              <span>Obecna runda (Zadania)</span>
               <span>{currentIndex} / {queue.length}</span>
             </div>
-            {renderProgressBar(roundStats.correct, roundStats.incorrect, queue.length)}
+            {/* Specjalny trójkolorowy pasek dla rundy grupowej */}
+            {renderGroupedRoundProgressBar(roundStats.full, roundStats.half, roundStats.zero, queue.length)}
           </div>
         </div>
 
-        {/* ZMNIEJSZONA FISZKA */}
-        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-auto">
-          
+        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-auto mb-10">
           <div className="mb-4 pb-4 border-b border-slate-100 shrink-0">
-            <p className="text-sm sm:text-base font-semibold text-slate-700 leading-snug">{currentQ.pytanie}</p>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">{currentGroup[0].pytanie}</h3>
           </div>
 
-          <div className="mb-4 shrink-0">
-            <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">{currentQ.odpowiedz}</h3>
-          </div>
-
-          {/* NOWE: WSKAZÓWKA (TIP) */}
-          {currentQ.tip && (config.studyMode || showAnswer) && (
-            <div className="mb-4 p-3.5 bg-amber-50 border border-amber-200 text-amber-900 text-sm rounded-xl animate-fade-in shrink-0 flex gap-3">
-              <div>
-                <span className="font-bold block mb-0.5 text-amber-800">Wskazówka:</span>
-                <span className="text-amber-700">{currentQ.tip}</span>
-              </div>
-            </div>
-          )}
-
-          {/* ODDZIELENIE ZGADYWANIA OD KLUCZA */}
-          {!showAnswer ? (
-             <div className="mt-auto pt-4 flex flex-col gap-2">
-               <div className="grid grid-cols-2 gap-3 w-full">
-                 <button onClick={() => handleGuess(true)} className="py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all">
-                   TAK
-                 </button>
-                 <button onClick={() => handleGuess(false)} className="py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all">
-                   NIE
-                 </button>
-               </div>
-             </div>
-          ) : (
-            <div className="mt-auto pt-5 border-t border-slate-100 animate-fade-in flex flex-col items-center">
-              
-              {/* Sekcja oceny zgadywania */}
-              <div className="mb-6 text-center w-full bg-slate-50 p-4 rounded-xl">
-                {userGuess === currentQ.odp ? (
-                  <div>
-                    <span className="block text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Poprawna odpowiedź!</span>
-                    <span className="text-2xl font-black text-emerald-500">{currentQ.odp ? "TAK" : "NIE"}</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className="block text-xs font-bold text-rose-600 uppercase tracking-widest mb-1">Pomyłka</span>
-                    <div className="flex items-center justify-center gap-3 text-2xl font-black">
-                       <span className="text-rose-500 line-through opacity-60">{userGuess ? "TAK" : "NIE"}</span>
-                       <span className="text-slate-400 text-lg">➜</span>
-                       <span className="text-emerald-500">{currentQ.odp ? "TAK" : "NIE"}</span>
+          <div className="flex flex-col gap-3">
+            {currentGroup.map((q) => {
+              const isCorrect = groupGuesses[q.id] === q.odp;
+              return (
+                <div key={q.id} className={`p-3 sm:p-4 rounded-xl border transition-colors ${showAnswer ? (isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200') : 'bg-slate-50 border-slate-100'}`}>
+                  
+                  {/* Pytanie i Przyciski OBOK siebie */}
+                  <div className="flex flex-row items-center justify-between gap-4">
+                    <p className="font-semibold text-slate-700 text-sm flex-1 m-0 leading-snug">{q.odpowiedz}</p>
+                    <div className="flex gap-1.5 shrink-0 w-[110px]">
+                      <button disabled={showAnswer} onClick={() => setGroupGuesses(prev => ({...prev, [q.id]: true}))} className={`flex-1 py-2 px-1 rounded-lg font-bold text-xs transition-all ${groupGuesses[q.id] === true ? 'bg-blue-600 text-white shadow-sm' : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-slate-300'} disabled:cursor-not-allowed`}>TAK</button>
+                      <button disabled={showAnswer} onClick={() => setGroupGuesses(prev => ({...prev, [q.id]: false}))} className={`flex-1 py-2 px-1 rounded-lg font-bold text-xs transition-all ${groupGuesses[q.id] === false ? 'bg-blue-600 text-white shadow-sm' : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-slate-300'} disabled:cursor-not-allowed`}>NIE</button>
                     </div>
                   </div>
-                )}
+
+                  {showAnswer && !isCorrect && (
+                    <div className="mt-3 text-xs font-bold text-rose-600 bg-white p-2 rounded-lg border border-rose-100">Poprawna odpowiedź: {q.odp ? 'TAK' : 'NIE'}</div>
+                  )}
+                  {showAnswer && q.tip && config.studyMode && (
+                    <div className="mt-2 p-2.5 bg-amber-50 border border-amber-200 text-amber-900 text-xs rounded-lg">
+                      <span className="font-bold">Wskazówka: </span>{q.tip}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {!showAnswer ? (
+            <div className="mt-6">
+              <button onClick={() => setShowAnswer(true)} disabled={!allAnswered} className={`w-full py-4 text-white font-bold text-base rounded-xl transition-all ${allAnswered ? 'bg-blue-600 shadow-sm hover:bg-blue-700 active:scale-95' : 'bg-slate-300 cursor-not-allowed'}`}>
+                Zatwierdź odpowiedzi
+              </button>
+            </div>
+          ) : (
+            <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center animate-fade-in">
+              <div className="mb-6 text-center">
+                <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Zdobyte punkty za zadanie</span>
+                <span className={`text-4xl font-black ${groupCorrectCount === currentGroup.length ? 'text-emerald-500' : groupCorrectCount === currentGroup.length - 1 ? 'text-amber-500' : 'text-rose-500'}`}>
+                  {groupCorrectCount === currentGroup.length ? '1.0' : groupCorrectCount === currentGroup.length - 1 ? '0.5' : '0.0'}
+                </span>
+                <span className="block text-xs font-bold text-slate-400 mt-2">Poprawnie {groupCorrectCount}/{currentGroup.length}</span>
               </div>
 
-              {/* Rzeczywista decyzja użytkownika */}
               {!config.autoAdvance ? (
-                <>
-                  <span className="text-xs font-bold text-slate-500 mb-3 text-center">Zapisz wynik dla tej fiszki:</span>
-                  <div className="grid grid-cols-2 gap-3 w-full">
-                    <button onClick={() => handleSelfEvaluation(false)} className="py-3 bg-white border-2 border-rose-100 text-rose-600 font-bold text-sm rounded-xl hover:bg-rose-50 active:scale-95 transition-all">
-                      Byłem w błędzie
-                    </button>
-                    <button onClick={() => handleSelfEvaluation(true)} className="py-3 bg-white border-2 border-emerald-100 text-emerald-600 font-bold text-sm rounded-xl hover:bg-emerald-50 active:scale-95 transition-all">
-                      Znałem odpowiedź
-                    </button>
-                  </div>
-                </>
-              ) : (
                 <div className="w-full">
-                  <button onClick={() => handleSelfEvaluation(userGuess === currentQ.odp)} className="w-full py-4 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-95">
-                    Dalej ➔
-                  </button>
+                  <span className="block text-xs font-bold text-slate-500 mb-3 text-center">Zapisz wynik i przydziel status całej grupie:</span>
+                  <div className="grid grid-cols-2 gap-3 w-full">
+                    <button onClick={() => handleGroupSelfEvaluation(false)} className="py-3 bg-white border-2 border-rose-100 text-rose-600 font-bold text-sm rounded-xl hover:bg-rose-50 active:scale-95 transition-all">Nie umiem grupy</button>
+                    <button onClick={() => handleGroupSelfEvaluation(true)} className="py-3 bg-white border-2 border-emerald-100 text-emerald-600 font-bold text-sm rounded-xl hover:bg-emerald-50 active:scale-95 transition-all">Umiem wszystkie</button>
+                  </div>
                 </div>
+              ) : (
+                <button onClick={() => handleGroupSelfEvaluation(null)} className="w-full py-4 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-95">Dalej ➔</button>
               )}
-
             </div>
           )}
         </div>

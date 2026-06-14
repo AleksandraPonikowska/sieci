@@ -1,10 +1,10 @@
 # 2019
 
 ## 1. Dlaczego router ma więcej niż jeden adres IP?
-- Jeden adres IP jest zawsze zarezerwowany do wysyłania pakietów do bramy domyślnej. / NIE
+- Jeden adres IP jest zawsze zarezerwowany do wysyłania pakietów do bramy domyślnej. / NIE 
 - Do każdego wpisu z tablicy routingu konieczny jest osobny adres IP. / NIE
-- Jeden adres służy tylko do przyjmowania pakietów a drugi tylko do ich wysyłania. / NIE
-- Każdy z interfejsów sieciowych routera jest zazwyczaj w odrębnej sieci i tym interfejsom przypisane są adresy z tych sieci. / TAK
+- Jeden adres służy tylko do przyjmowania pakietów a drugi tylko do ich wysyłania. / NIE / Routery działają w trybie pełnego dupleksu
+- Każdy z interfejsów sieciowych routera jest zazwyczaj w odrębnej sieci i tym interfejsom przypisane są adresy z tych sieci. / TAK / Zadaniem routera jest łączenie różnych sieci. Aby mógł on "widzieć" sieci i przekazywać między nimi pakiety, musi być fizycznie lub logicznie częścią każdej z nich.
 
 ## 2. Załóżmy, że routery A i B są bezpośrednio połączone i wykorzystują algorytm routingu dynamicznego oparty na wektorach odległości z włączonym mechanizmem zatruwania ścieżek z metryką równą liczbie hopów. Tablica routingu A zawiera wpis określający, że istnieje ścieżka długości 3 do routera X, na której pierwszym krokiem jest router B. Router B wysyła do routera A informację, że jego odległość od X wynosi 5. Co zrobi router A?
 - Zignoruje tę informację, gdyż jego obecna trasa jest lepsza. / NIE
@@ -42,7 +42,7 @@
 - Potrafi dokonywać konwersji pomiędzy różnymi formatami plików. / NIE
 - Umożliwia kontrolę przepływu. / TAK
 
-## 8.Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?
+## 8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?
 - Lokalny port / TAK
 - Zdalny adres IP / TAK
 - MTU / NIE
@@ -200,10 +200,10 @@
 
 
 ## 33. W typowej kryptografii asymetrycznej:
-- łatwo złamać klucz, jeśli znamy parę tekst jawny + szyfrogram / NIE
-- szyfrujemy wiadomość kluczem publicznym odbiorcy / TAK
-- szyfrujemy wiadomość kluczem prywatnym nadawcy / NIE
-- szyfrujemy wiadomość kluczem prywatnym odbiorcy / NIE
+- Łatwo złamać klucz, jeśli znamy parę tekst jawny + szyfrogram / NIE / Mega trudny problem matematyczny
+- Szyfrujemy wiadomość kluczem publicznym odbiorcy / TAK / 
+- Szyfrujemy wiadomość kluczem prywatnym nadawcy / NIE / Szyfrowanie kluczem prywatnym hasza wiadomości to podpis cyfrowy
+- Szyfrujemy wiadomość kluczem prywatnym odbiorcy / NIE / Po co miałby sam sobie szyfrować, publicznym się to robi
 
 ## 34. Zaznacz prawdziwe zdania w przypadku systemów autonomicznych.
 - BGP jest protokołem stanu łączy / NIE
