@@ -43,10 +43,10 @@
 - Umożliwia kontrolę przepływu. / TAK
 
 ## 8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?
-- Lokalny port / TAK
-- Zdalny adres IP / TAK
-- MTU / NIE
-- Rozmiar okna / NIE
+- Lokalny port / TAK / Port (np. 80 dla serwera WWW) to kluczowa informacja w nagłówku TCP. To on mówi systemowi operacyjnemu, do jakiej konkretnie aplikacji (do którego gniazda) mają trafić odebrane dane.
+- Zdalny adres IP / TAK / Każde aktywne połączenie TCP jest identyfikowane przez unikalną "czwórkę": lokalny port, lokalny IP, zdalny port i zdalny IP. Dzięki obecności zdalnego adresu IP w pakiecie, serwer wie, od którego z wielu podłączonych klientów pochodzą dane, i kieruje je do właściwego gniazda.
+- MTU / NIE / MTU (Maximum Transmission Unit) określa jedynie maksymalny fizyczny rozmiar pakietu (np. 1500 bajtów), jaki może przejść przez sieć. Nie służy do identyfikacji czy adresowania.
+- Rozmiar okna / NIE / Rozmiar okna (Window Size) to parametr w nagłówku TCP służący wyłącznie do kontroli przepływu (mówi o tym, ile wolnego miejsca w buforze ma odbiorca). Nie bierze udziału w procesie przydzielania pakietu do odpowiedniej aplikacji.
 
 ## 9. Jaka maska podsieci umożliwi wykorzystanie dokładnie 510 adresów IP do adresowania komputerów?
 - 255.255.254.0 / TAK
@@ -87,10 +87,10 @@
 - Jest połączeniowy / NIE
 
 ## 15. Tylko jedna poprawna odpowiedź. Przeglądarka WWW nawiązała połączenie z serwerem WWW. Pakiet zawierający całe żądanie HTTP gubi się. Co się stanie?
-- Po pewnym czasie przeglądarka WWW wyśle zapytanie ARP / NIE
-- Po pewnym czasie przeglądarka WWW ponownie wyśle pakiet / NIE
-- Po pewnym czasie warstwa transportowa ponownie wyśle pakiet / TAK
-- Po pewnym czasie serwer WWW wyśle żądanie o ponowne przesłanie zagubionego pakietu / NIE
+- Po pewnym czasie przeglądarka WWW wyśle zapytanie ARP / NIE / Protokół ARP służy do znajdowania adresów fizycznych MAC w sieci lokalnej na samym początku komunikacji. Skoro połączenie z serwerem zostało już pomyślnie nawiązane, urządzenia wiedzą już, dokąd kierować ruch.
+- Po pewnym czasie przeglądarka WWW ponownie wyśle pakiet / NIE / Przeglądarka to warstwa aplikacji. Jej zadaniem jest przekazać żądanie HTTP "w dół" do systemu operacyjnego i czekać na odpowiedź. Nie zajmuje się ona śledzeniem i retransmisją pojedynczych, zagubionych w sieci pakietów.
+- Po pewnym czasie warstwa transportowa ponownie wyśle pakiet / TAK / HTTP korzysta z protokołu TCP w warstwie transportowej, który gwarantuje niezawodność. Jeśli nadawca (Twój system) nie otrzyma od serwera potwierdzenia (tzw. ACK) w ustalonym czasie, warstwa transportowa automatycznie wyśle zgubiony pakiet ponownie.
+- Po pewnym czasie serwer WWW wyśle żądanie o ponowne przesłanie zagubionego pakietu / NIE / Serwer fizycznie nie wie, że przeglądarka cokolwiek wysłała, skoro pakiet zgubił się po drodze. Serwer po prostu "milczy" i oczekuje na dane. Ciężar zorientowania się, że pakiet zaginął (na podstawie braku potwierdzenia), spoczywa wyłącznie na nadawcy.
 
 ## 16. Zaznacz prawdziwe zdania.
 - 44.44.44.44/30 jest adresem przypisywanym komputerowi / NIE
@@ -219,10 +219,10 @@
 - Możliwe jest skonstruowanie równoważnej tablicy routingu zawierającej 2 wpisy / NIE
 
 ## 36. Komputer A nawiązuje połączenie z komputerem B za pomocą TCP. Zaznacz prawdziwe zdania.
-- Komputer A może wysłać segment z danymi już po otrzymaniu pierwszego segmentu z ustawionym bitem ACK / TAK
-- Komputer A rozpocznie od wysłania segmentu z ustawionym bitem SYN / TAK
-- Komputer B może wysłać segment z danymi już po otrzymaniu pierwszego segmentu z ustawionym bitem RST / NIE
-- Komputer A może wysłać segment z danymi dopiero po otrzymaniu pierwszego segmentu z danymi od B / NIE
+- Komputer A może wysłać segment z danymi już po otrzymaniu pierwszego segmentu z ustawionym bitem ACK / TAK / Nawiązywanie połączenia składa się z trzech kroków. Komputer A wysyła SYN, a w odpowiedzi otrzymuje od B pakiet SYN-ACK (to jest pierwszy otrzymany pakiet z bitem ACK). Gdy tylko A go odbierze, wysyła ostatnie potwierdzenie i w tym samym momencie może do niego dołączyć pierwsze użyteczne dane (np. żądanie HTTP).
+- Komputer A rozpocznie od wysłania segmentu z ustawionym bitem SYN / TAK / To bezwzględnie pierwszy krok przy tworzeniu każdego nowego połączenia TCP. Flaga SYN (Synchronize) informuje serwer: "chcę nawiązać połączenie" i synchronizuje początkowe numery sekwencyjne dla pakietów.
+- Komputer B może wysłać segment z danymi już po otrzymaniu pierwszego segmentu z ustawionym bitem RST / NIE / Flaga RST (Reset) służy do awaryjnego, twardego zresetowania (zerwania) połączenia (np. gdy port jest zamknięty lub wystąpił błąd). Po otrzymaniu RST jakiekolwiek przesyłanie danych jest niemożliwe – połączenie zostaje natychmiast przerwane.
+- Komputer A może wysłać segment z danymi dopiero po otrzymaniu pierwszego segmentu z danymi od B / NIE / Protokół TCP jest dwukierunkowy i niezależny. Gdy tylko połączenie zostanie nawiązane, komputer A (zazwyczaj klient) nie musi na nic czekać i wręcz najczęściej jako pierwszy wysyła dane (np. zapytanie o stronę WWW). Nie musi czekać, aż serwer wyśle swoje dane jako pierwszy.
 
 ## 37. Jakie rozwiązania poprawiają wydajności komunikacji za pośrednictwem protokołu HTTP?
 - Zapytania ARP / NIE / Protokół ARP działa w niższych warstwach i służy do zamiany adresów IP na adresy fizyczne MAC w sieci lokalnej.
