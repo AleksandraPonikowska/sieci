@@ -1,6 +1,6 @@
 # 2019
 
-## 1. Dlaczego router ma więcej niż jeden adres IP.
+## 1. DZIAŁA :3
 - Jeden adres IP jest zawsze zarezerwowany do wysyłania pakietów do bramy domyślnej / TAK
 - Do każdego wpisu w tablicy routingu konieczny jest osobny adres IP / NIE
 
