@@ -142,6 +142,8 @@ function BrowseView({ examId, progress, updateProgress, updateGroupProgress, cle
                           <p className="mt-2 font-bold text-xs">
                             Odpowiedź z klucza: <span className={`px-2 py-0.5 rounded ml-1 ${q.odp ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{q.odp ? "TAK" : "NIE"}</span>
                           </p>
+                          {/* WSKAZÓWKA W PRZEGLĄDARCE */}
+                          
                         </div>
                         <div className="flex gap-2 w-full sm:w-auto">
                           <button onClick={() => updateProgress(q.id, 'known')} className={`flex-1 sm:flex-none px-4 py-2 text-sm rounded-lg font-bold transition-colors ${status === 'known' ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50 hover:border-emerald-200'}`}>Umiem</button>
@@ -167,6 +169,7 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
   const [roundSize, setRoundSize] = useState(Math.min(10, availableCount) || availableCount);
   const [shuffle, setShuffle] = useState(true);
   const [autoAdvance, setAutoAdvance] = useState(true);
+  const [studyMode, setStudyMode] = useState(false); // NOWY STAN DLA TRYBU NAUKI
 
   if (availableCount === 0) {
     return (
@@ -174,10 +177,8 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
         <TopNavigation onBack={onBack} backText="Menu Egzaminu" />
         <main className="flex-1 flex flex-col items-center justify-center p-4">
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-lg text-center">
-            
             <h2 className="text-2xl font-black mb-4 text-slate-800">Gratulacje! 🎉</h2>
             <p className=" text-sm text-slate-600">Umiesz już wszystkie pytania z tego egzaminu.</p>
-            
           </div>
         </main>
       </div>
@@ -213,9 +214,15 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
               <input type="checkbox" checked={autoAdvance} readOnly className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 pointer-events-none" />
               <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Automatyczne sprawdzanie odpowiedzi</label>
             </div>
+
+            {/* NOWY CHECKBOX - TRYB NAUKI */}
+            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 cursor-pointer" onClick={() => setStudyMode(!studyMode)}>
+              <input type="checkbox" checked={studyMode} readOnly className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 pointer-events-none" />
+              <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Tryb nauki (wyświetlaj wskazówki od razu)</label>
+            </div>
           </div>
 
-          <button onClick={() => onStart({ roundSize, shuffle, forceAll: false, autoAdvance })} className="w-full py-3.5 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-[0.98]">
+          <button onClick={() => onStart({ roundSize, shuffle, forceAll: false, autoAdvance, studyMode })} className="w-full py-3.5 bg-blue-600 text-white font-bold text-base rounded-xl shadow-sm hover:bg-blue-700 transition-all active:scale-[0.98]">
             Rozpocznij rundę
           </button>
         </div>
@@ -381,6 +388,16 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
             <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">{currentQ.odpowiedz}</h3>
           </div>
 
+          {/* NOWE: WSKAZÓWKA (TIP) */}
+          {currentQ.tip && (config.studyMode || showAnswer) && (
+            <div className="mb-4 p-3.5 bg-amber-50 border border-amber-200 text-amber-900 text-sm rounded-xl animate-fade-in shrink-0 flex gap-3">
+              <div>
+                <span className="font-bold block mb-0.5 text-amber-800">Wskazówka:</span>
+                <span className="text-amber-700">{currentQ.tip}</span>
+              </div>
+            </div>
+          )}
+
           {/* ODDZIELENIE ZGADYWANIA OD KLUCZA */}
           {!showAnswer ? (
              <div className="mt-auto pt-4 flex flex-col gap-2">
@@ -401,7 +418,7 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
                 {userGuess === currentQ.odp ? (
                   <div>
                     <span className="block text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Poprawna odpowiedź!</span>
-                    <span className="text-2xl font-black text-emerald-500">{currentQ.odp ? "[T] TAK" : "[N] NIE"}</span>
+                    <span className="text-2xl font-black text-emerald-500">{currentQ.odp ? "TAK" : "NIE"}</span>
                   </div>
                 ) : (
                   <div>

@@ -2,13 +2,14 @@ export const exams = {
   "2019": [
     {
       "id": "2019-1-a",
-      "pytanie": "1. DDlaczego router ma więcej niż jeden adres IP.",
+      "pytanie": "1. DZIAŁA :3",
       "odpowiedz": "Jeden adres IP jest zawsze zarezerwowany do wysyłania pakietów do bramy domyślnej",
-      "odp": true
+      "odp": true,
+      "tip": "CIEKAWOSKA"
     },
     {
       "id": "2019-1-b",
-      "pytanie": "1. Dlaczego router ma więcej niż jeden adres IP.",
+      "pytanie": "1. DZIAŁA :3",
       "odpowiedz": "Do każdego wpisu w tablicy routingu konieczny jest osobny adres IP",
       "odp": false
     }
