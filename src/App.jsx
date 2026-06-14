@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { exams } from "./data";
+import { exams} from "./data"; // Pamiętaj o eksporcie tematy z data.js!
+import { tematy } from "./data2"; // Pamiętaj o eksporcie tematy z data.js!
+
 
 // --- IKONY (SVG) ---
 const IconArrowLeft = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
@@ -22,6 +24,7 @@ function TopNavigation({ onBack, backText = "Powrót", backIcon = <IconArrowLeft
 export default function App() {
   const [view, setView] = useState('home');
   const [selectedExam, setSelectedExam] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [progress, setProgress] = useState({});
   const [testConfig, setTestConfig] = useState(null);
 
@@ -54,13 +57,17 @@ export default function App() {
     localStorage.setItem('flashcards_progress', JSON.stringify(newProgress));
   };
 
-  const goHome = () => { setView('home'); setSelectedExam(null); };
+  const goHome = () => { 
+    setView('home'); 
+    setSelectedExam(null); 
+    setSelectedCategory(null);
+  };
 
   if (view === 'home') return <HomeView onSelect={(id) => { setSelectedExam(id); setView('menu'); }} />;
-  if (view === 'menu') return <MenuView examId={selectedExam} onBack={goHome} onBrowse={() => setView('browse')} onTest={() => setView('testConfig')} />;
+  if (view === 'menu') return <MenuView examId={selectedExam} progress={progress} onBack={goHome} onBrowse={() => { setSelectedCategory(null); setView('browse'); }} onTest={(category = null) => { setSelectedCategory(category); setView('testConfig'); }} />;
   if (view === 'browse') return <BrowseView examId={selectedExam} progress={progress} updateProgress={updateProgress} updateGroupProgress={updateGroupProgress} clearProgress={() => clearExamProgress(selectedExam)} onBack={() => setView('menu')} />;
-  if (view === 'testConfig') return <TestConfigView examId={selectedExam} progress={progress} clearProgress={() => clearExamProgress(selectedExam)} onBack={() => setView('menu')} onStart={(config) => { setTestConfig(config); setView('testActive'); }} />;
-  if (view === 'testActive') return <TestActiveView examId={selectedExam} config={testConfig} progress={progress} updateProgress={updateProgress} updateGroupProgress={updateGroupProgress} onFinish={() => setView('menu')} onBack={() => setView('menu')} />;
+  if (view === 'testConfig') return <TestConfigView examId={selectedExam} category={selectedCategory} progress={progress} clearProgress={() => clearExamProgress(selectedExam)} onBack={() => setView('menu')} onStart={(config) => { setTestConfig(config); setView('testActive'); }} />;
+  if (view === 'testActive') return <TestActiveView examId={selectedExam} category={selectedCategory} config={testConfig} progress={progress} updateProgress={updateProgress} updateGroupProgress={updateGroupProgress} onFinish={() => setView('menu')} onBack={() => setView('menu')} />;
 
   return null;
 }
@@ -83,27 +90,77 @@ function HomeView({ onSelect }) {
   );
 }
 
-function MenuView({ examId, onBack, onBrowse, onTest }) {
+function MenuView({ examId, progress, onBack, onBrowse, onTest }) {
+  const categories = tematy[examId] || [];
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <TopNavigation onBack={onBack} backText="Wybór egzaminu" />
-      <main className="flex-1 w-full max-w-3xl mx-auto p-6 flex flex-col items-center justify-center">
-        <h2 className="text-3xl font-black text-slate-800 mb-8">Egzamin {examId}</h2>
-        <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
+      <main className="flex-1 w-full max-w-4xl mx-auto p-4 sm:p-6 flex flex-col">
+        
+        <div className="text-center mb-8 mt-4">
+          <h2 className="text-3xl font-black text-slate-800">Egzamin {examId}</h2>
+          <p className="text-slate-500 mt-2 font-medium">Wybierz tryb nauki lub konkretny dział</p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full mb-10">
           <button onClick={onBrowse} className="flex-1 py-4 px-6 bg-white border border-slate-200 shadow-sm rounded-xl text-lg font-bold text-slate-700 hover:bg-slate-50 transition-all">
-            Przeglądaj pytania
+            Przeglądaj wszystkie
           </button>
-          <button onClick={onTest} className="flex-1 py-4 px-6 bg-blue-600 text-white shadow-md rounded-xl text-lg font-bold hover:bg-blue-700 transition-all">
-            Rozpocznij Test
+          <button onClick={() => onTest(null)} className="flex-1 py-4 px-6 bg-blue-600 text-white shadow-md rounded-xl text-lg font-bold hover:bg-blue-700 transition-all">
+            Test z całości
           </button>
         </div>
+
+        {categories.length > 0 && (
+          <div>
+            <h3 className="text-xl font-bold text-slate-800 mb-4 px-1">Tematy z tego egzaminu:</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {categories.map(cat => {
+                const catQuestions = exams[examId].filter(q => {
+                  const taskId = parseInt(q.id.split('-')[1], 10);
+                  return cat.tasks.includes(taskId);
+                });
+                
+                const total = catQuestions.length;
+                const known = catQuestions.filter(q => progress[q.id] === 'known').length;
+                const unknown = catQuestions.filter(q => progress[q.id] === 'unknown').length;
+                const unseen = total - known - unknown;
+                
+                const knownPct = (known / total) * 100 || 0;
+                const unknownPct = (unknown / total) * 100 || 0;
+                const unseenPct = (unseen / total) * 100 || 0;
+
+                return (
+                  <div key={cat.id} onClick={() => onTest(cat)} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group flex flex-col justify-between">
+                    <div className="mb-4">
+                      <h4 className="text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors">{cat.nazwa}</h4>
+                      <p className="text-sm text-slate-500 mt-1">{total} pytań</p>
+                    </div>
+                    
+                    <div className="mt-auto">
+                      <div className="flex justify-between text-xs font-bold mb-1.5">
+                        <span className="text-emerald-600">{known} umiem</span>
+                        <span className="text-slate-400">{unseen} nowych</span>
+                      </div>
+                      <div className="h-2 w-full bg-slate-100 rounded-full flex overflow-hidden">
+                        <div style={{ width: `${knownPct}%` }} className="bg-emerald-500"></div>
+                        <div style={{ width: `${unknownPct}%` }} className="bg-rose-500"></div>
+                        <div style={{ width: `${unseenPct}%` }} className="bg-slate-200"></div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
 }
 
 function BrowseView({ examId, progress, updateProgress, updateGroupProgress, clearProgress, onBack }) {
-  // Grupowanie po ID logicznego pytania, np. z "2019-34-b" robimy "2019-34"
   const groupedMap = exams[examId].reduce((acc, curr) => {
     const groupKey = curr.id.split('-').slice(0, 2).join('-');
     if (!acc[groupKey]) acc[groupKey] = { title: curr.pytanie, items: [] };
@@ -164,16 +221,21 @@ function BrowseView({ examId, progress, updateProgress, updateGroupProgress, cle
   );
 }
 
-function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
+function TestConfigView({ examId, category, progress, clearProgress, onBack, onStart }) {
   const [groupedMode, setGroupedMode] = useState(false);
   
-  // Obliczenia dla trybu pojedynczego
-  const availableSingles = exams[examId].filter(q => progress[q.id] !== 'known');
+  const questionPool = category 
+    ? exams[examId].filter(q => {
+        const taskId = parseInt(q.id.split('-')[1], 10);
+        return category.tasks.includes(taskId);
+      })
+    : exams[examId];
+
+  const availableSingles = questionPool.filter(q => progress[q.id] !== 'known');
   const availableCountSingle = availableSingles.length;
 
-  // Obliczenia dla trybu grupowego
   const groupedMap = {};
-  exams[examId].forEach(q => {
+  questionPool.forEach(q => {
     const gKey = q.id.split('-').slice(0, 2).join('-');
     if (!groupedMap[gKey]) groupedMap[gKey] = [];
     groupedMap[gKey].push(q);
@@ -181,7 +243,6 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
   const availableGroups = Object.values(groupedMap).filter(g => g.some(q => progress[q.id] !== 'known'));
   const availableCountGrouped = availableGroups.length;
 
-  // Realna wartość zależnie od trybu
   const availableCount = groupedMode ? availableCountGrouped : availableCountSingle;
   
   const [roundSize, setRoundSize] = useState(10);
@@ -189,7 +250,6 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
   const [autoAdvance, setAutoAdvance] = useState(true);
   const [studyMode, setStudyMode] = useState(false);
 
-  // Bezpieczna aktualizacja roundSize przy zmianie trybu, żeby nie przeskoczyło zakresu
   useEffect(() => {
     if (availableCount > 0 && roundSize > availableCount) {
       setRoundSize(availableCount);
@@ -203,7 +263,7 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
         <main className="flex-1 flex flex-col items-center justify-center p-4">
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-lg text-center">
             <h2 className="text-2xl font-black mb-4 text-slate-800">Gratulacje! 🎉</h2>
-            <p className=" text-sm text-slate-600">Umiesz już wszystkie pytania z tego egzaminu.</p>
+            <p className=" text-sm text-slate-600">Umiesz już wszystkie pytania z {category ? 'tej kategorii' : 'tego egzaminu'}.</p>
           </div>
         </main>
       </div>
@@ -216,11 +276,18 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
       <main className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-lg">
           <h2 className="text-xl font-black mb-3 text-slate-800">Konfiguracja Testu</h2>
+          {category && (
+            <p className="text-sm font-bold text-slate-500 mb-4 uppercase tracking-wider">
+              Kategoria: <span className="text-blue-600">{category.nazwa}</span>
+            </p>
+          )}
+          
           <div className="inline-block bg-blue-50 px-3 py-1.5 rounded-lg mb-6 border border-blue-100">
             <p className="text-sm font-bold text-blue-700">
               Do nauki pozostało {groupedMode ? "zadań" : "pytań (pojedynczych)"}: {availableCount}
             </p>
           </div>
+          
           <label className="block text-sm font-bold text-slate-700 mb-2">Wybierz wielkość rundy {groupedMode ? "(ilość pełnych zadań)" : ""}:</label>
           <select value={roundSize} onChange={(e) => setRoundSize(Number(e.target.value))} className="w-full mb-5 bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm font-bold text-slate-800 outline-none focus:border-blue-500 focus:ring-2 ring-blue-100 transition-all cursor-pointer">
             {availableCount >= 3 && <option value={3}>3 {groupedMode ? "zadania" : "pytania"}</option>}
@@ -249,7 +316,7 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
 
             <div className="flex items-center gap-3 bg-blue-50/50 p-3 rounded-lg border border-blue-200 cursor-pointer" onClick={() => setGroupedMode(!groupedMode)}>
               <input type="checkbox" checked={groupedMode} readOnly className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 pointer-events-none" />
-              <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Tryb egzamin</label>
+              <label className="text-sm text-slate-700 font-bold select-none cursor-pointer">Tryb egzamin (całe zadania na raz)</label>
             </div>
           </div>
 
@@ -262,7 +329,7 @@ function TestConfigView({ examId, progress, clearProgress, onBack, onStart }) {
   );
 }
 
-function TestActiveView({ examId, config: initialConfig, progress, updateProgress, updateGroupProgress, onFinish, onBack }) {
+function TestActiveView({ examId, category, config: initialConfig, progress, updateProgress, updateGroupProgress, onFinish, onBack }) {
   const [config, setConfig] = useState(initialConfig);
   const [queue, setQueue] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -271,36 +338,68 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
   const [userGuess, setUserGuess] = useState(null);
   const [groupGuesses, setGroupGuesses] = useState({}); 
   
-  // Zmodyfikowane statystyki, żeby obsługiwały zliczenia full (1pkt), half (0.5pkt), zero (0pkt) dla paska rundy
   const [roundStats, setRoundStats] = useState({ correct: 0, incorrect: 0, score: 0, full: 0, half: 0, zero: 0 });
-  
   const [roundFinished, setRoundFinished] = useState(false);
   const [roundId, setRoundId] = useState(0); 
+
+  const questionPool = category 
+    ? exams[examId].filter(q => {
+        const taskId = parseInt(q.id.split('-')[1], 10);
+        return category.tasks.includes(taskId);
+      })
+    : exams[examId];
 
   useEffect(() => {
     let finalQueue = [];
 
     if (config.groupedMode) {
       const grouped = {};
-      exams[examId].forEach(q => {
+      questionPool.forEach(q => {
         const gKey = q.id.split('-').slice(0, 2).join('-');
         if (!grouped[gKey]) grouped[gKey] = [];
         grouped[gKey].push(q);
       });
       let availableGroups = Object.values(grouped);
+      let carryOvers = []; 
+
       if (!config.forceAll) {
-        // Filtr: Grupa kwalifikuje się, jeśli CO NAJMNIEJ jedna składowa jest "nieznana"
         availableGroups = availableGroups.filter(g => g.some(q => progress[q.id] !== 'known'));
+        if (queue.length > 0) {
+          carryOvers = queue.filter(g => g.some(q => progress[q.id] !== 'known'));
+        }
       }
-      if (config.shuffle) availableGroups.sort(() => Math.random() - 0.5);
-      finalQueue = availableGroups.slice(0, config.roundSize);
+      
+      const getGKey = (g) => g[0].id.split('-').slice(0, 2).join('-');
+      const carryOverKeys = carryOvers.map(getGKey);
+      
+      let remainingPool = availableGroups.filter(g => !carryOverKeys.includes(getGKey(g)));
+      if (config.shuffle) remainingPool.sort(() => Math.random() - 0.5);
+      
+      const neededNew = Math.max(0, config.roundSize - carryOvers.length);
+      const newItems = remainingPool.slice(0, neededNew);
+      
+      finalQueue = [...carryOvers, ...newItems];
+      if (config.shuffle) finalQueue.sort(() => Math.random() - 0.5);
+
     } else {
-      let qList = exams[examId];
+      let qList = questionPool;
+      let carryOvers = [];
+
       if (!config.forceAll) {
         qList = qList.filter(q => progress[q.id] !== 'known');
+        if (queue.length > 0) {
+          carryOvers = queue.filter(q => progress[q.id] !== 'known');
+        }
       }
-      if (config.shuffle) qList.sort(() => Math.random() - 0.5);
-      finalQueue = qList.slice(0, config.roundSize);
+      
+      let remainingPool = qList.filter(q => !carryOvers.find(c => c.id === q.id));
+      if (config.shuffle) remainingPool.sort(() => Math.random() - 0.5);
+      
+      const neededNew = Math.max(0, config.roundSize - carryOvers.length);
+      const newItems = remainingPool.slice(0, neededNew);
+      
+      finalQueue = [...carryOvers, ...newItems];
+      if (config.shuffle) finalQueue.sort(() => Math.random() - 0.5);
     }
     
     setQueue(finalQueue);
@@ -311,13 +410,13 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     setRoundStats({ correct: 0, incorrect: 0, score: 0, full: 0, half: 0, zero: 0 });
     setRoundFinished(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examId, config, roundId]);
+  }, [examId, config, roundId, category]);
 
   const currentEntity = queue[currentIndex];
   
-  const totalQuestions = exams[examId].length;
-  const knownTotal = exams[examId].filter(q => progress[q.id] === 'known').length;
-  const unknownTotal = exams[examId].filter(q => progress[q.id] === 'unknown').length;
+  const totalQuestions = questionPool.length;
+  const knownTotal = questionPool.filter(q => progress[q.id] === 'known').length;
+  const unknownTotal = questionPool.filter(q => progress[q.id] === 'unknown').length;
   const unseenTotal = totalQuestions - knownTotal - unknownTotal;
   const remainingInExam = totalQuestions - knownTotal; 
 
@@ -335,7 +434,6 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     );
   };
 
-  // Specjalny trójkolorowy pasek dla trybu grupowego w ramach obecnej rundy
   const renderGroupedRoundProgressBar = (full, half, zero, total) => {
     const fullPct = (full / total) * 100 || 0;
     const halfPct = (half / total) * 100 || 0;
@@ -358,11 +456,11 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
-        <TopNavigation onBack={onFinish} backText="Przerwij i wróć" />
+        <TopNavigation onBack={onFinish} backText="Wróć do menu" />
         <main className="flex-1 flex flex-col items-center justify-center p-4">
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-md text-center">
             <h2 className="text-2xl font-black mb-3 text-slate-800">
-              {isExamDone ? 'Egzamin opanowany! 🎉' : 'Koniec rundy'}
+              {isExamDone ? 'Materiał opanowany! 🎉' : 'Koniec rundy'}
             </h2>
             <p className="text-sm text-slate-500 mb-4">Twój wynik w tej rundzie:</p>
             <div className="text-5xl font-black mb-8" style={{ color: scorePct >= 50 ? '#059669' : '#e11d48' }}>
@@ -386,7 +484,7 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
                   </button>
                   {remainingInExam > (config.groupedMode ? config.roundSize * 4 : config.roundSize) && (
                     <button onClick={() => { setConfig(prev => ({ ...prev, roundSize: config.groupedMode ? Math.ceil(remainingInExam / 4) : remainingInExam })); setRoundId(id => id + 1); }} className="w-full py-3.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-xl font-bold text-sm hover:bg-blue-100 transition-colors">
-                      Dokończ resztę
+                      Dokończ resztę bez limitu
                     </button>
                   )}
                 </>
@@ -440,7 +538,7 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
           <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 shrink-0">
             <div>
               <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
-                <span>Egzamin</span>
+                <span>{category ? 'Dział' : 'Egzamin'}</span>
                 <span>{knownTotal + unknownTotal} / {totalQuestions}</span>
               </div>
               {renderProgressBar(knownTotal, unknownTotal, totalQuestions)}
@@ -536,7 +634,6 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
     const isPerfect = cCount === currentGroup.length;
     const isHalf = cCount === currentGroup.length - 1;
     const points = isPerfect ? 1 : (isHalf ? 0.5 : 0);
-    // W auto-postępie - zalicza do "Umiem" tylko jeśli wszystkie bezbłędnie
     const finalStatus = forceKnown !== null ? forceKnown : isPerfect; 
 
     updateGroupProgress(currentGroup.map(q => q.id), finalStatus ? 'known' : 'unknown');
@@ -567,7 +664,7 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
         <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 shrink-0">
           <div>
             <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">
-              <span>Egzamin (pojedyncze pytania)</span>
+              <span>{category ? 'Dział (pytania)' : 'Egzamin (pytania)'}</span>
               <span>{knownTotal + unknownTotal} / {totalQuestions}</span>
             </div>
             {renderProgressBar(knownTotal, unknownTotal, totalQuestions)}
@@ -577,7 +674,6 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
               <span>Obecna runda (Zadania)</span>
               <span>{currentIndex} / {queue.length}</span>
             </div>
-            {/* Specjalny trójkolorowy pasek dla rundy grupowej */}
             {renderGroupedRoundProgressBar(roundStats.full, roundStats.half, roundStats.zero, queue.length)}
           </div>
         </div>
@@ -593,7 +689,6 @@ function TestActiveView({ examId, config: initialConfig, progress, updateProgres
               return (
                 <div key={q.id} className={`p-3 sm:p-4 rounded-xl border transition-colors ${showAnswer ? (isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200') : 'bg-slate-50 border-slate-100'}`}>
                   
-                  {/* Pytanie i Przyciski OBOK siebie */}
                   <div className="flex flex-row items-center justify-between gap-4">
                     <p className="font-semibold text-slate-700 text-sm flex-1 m-0 leading-snug">{q.odpowiedz}</p>
                     <div className="flex gap-1.5 shrink-0 w-[110px]">

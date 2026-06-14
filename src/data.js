@@ -507,26 +507,26 @@ export const exams = {
       "odp": true
     },
     {
-      "id": "2019-21-e",
-      "pytanie": "21. Zaznacz techniki routingu dynamicznego pomagające uniknąć cykli w routingu.",
+      "id": "2019-22-a",
+      "pytanie": "22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:",
       "odpowiedz": "wymaga komunikatów kontrolnych wysyłanych przez routery",
       "odp": false
     },
     {
-      "id": "2019-21-f",
-      "pytanie": "21. Zaznacz techniki routingu dynamicznego pomagające uniknąć cykli w routingu.",
+      "id": "2019-22-b",
+      "pytanie": "22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:",
       "odpowiedz": "zakłada, że utrata pakietów nastąpiła na skutek przepełnienia kolejek",
       "odp": true
     },
     {
-      "id": "2019-21-g",
-      "pytanie": "21. Zaznacz techniki routingu dynamicznego pomagające uniknąć cykli w routingu.",
+      "id": "2019-22-c",
+      "pytanie": "22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:",
       "odpowiedz": "zakłada, że utrata pakietów nastąpiła na skutek błędów warstwy fizycznej",
       "odp": false
     },
     {
-      "id": "2019-21-h",
-      "pytanie": "21. Zaznacz techniki routingu dynamicznego pomagające uniknąć cykli w routingu.",
+      "id": "2019-22-d",
+      "pytanie": "22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:",
       "odpowiedz": "preferuje transmisje o większym czasie RTT",
       "odp": false
     },
@@ -970,3 +970,4 @@ export const exams = {
     }
   ]
 };
+
