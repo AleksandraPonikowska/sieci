@@ -7,40 +7,40 @@
 - Każdy z interfejsów sieciowych routera jest zazwyczaj w odrębnej sieci i tym interfejsom przypisane są adresy z tych sieci. / TAK / Zadaniem routera jest łączenie różnych sieci. Aby mógł on "widzieć" sieci i przekazywać między nimi pakiety, musi być fizycznie lub logicznie częścią każdej z nich.
 
 ## 2. Załóżmy, że routery A i B są bezpośrednio połączone i wykorzystują algorytm routingu dynamicznego oparty na wektorach odległości z włączonym mechanizmem zatruwania ścieżek z metryką równą liczbie hopów. Tablica routingu A zawiera wpis określający, że istnieje ścieżka długości 3 do routera X, na której pierwszym krokiem jest router B. Router B wysyła do routera A informację, że jego odległość od X wynosi 5. Co zrobi router A?
-- Zignoruje tę informację, gdyż jego obecna trasa jest lepsza. / NIE
-- Zaktualizuje swój wpis, zmieniając odległość do routera X na 6. / TAK
-- Zaktualizuje swój wpis, zmieniając odległość do routera X na 8. / NIE
-- Powyższa informacja nie dotrze do A ze względu na mechanizm zatruwania ścieżek. / NIE
+- Zignoruje tę informację, gdyż jego obecna trasa jest lepsza. / NIE / W wektorach odległości (np. protokół RIP) router ufa swojemu sąsiadowi. Skoro router A dociera do X za pośrednictwem routera B, to musi uwierzyć w każdą nową wartość podaną przez B (nawet gorszą), ponieważ i tak cały jego ruch przechodzi przez ten węzeł.
+- Zaktualizuje swój wpis, zmieniając odległość do routera X na 6. / TAK / Złota zasada wektora odległości: odległość całkowita to "odległość sąsiada do celu" plus "odległość od nas do sąsiada". Skoro B podaje odległość 5, a przejście z A do B to 1 skok (są bezpośrednio połączone), to nowa trasa z A do X wynosi: 5 + 1 = 6.
+- Zaktualizuje swój wpis, zmieniając odległość do routera X na 8. / NIE / Wartość matematycznie błędna. Router A aktualizuje dystans wyłącznie na podstawie nowej informacji od B (5) i kosztu dotarcia do B (1). Stara wartość na tablicy (3) jest w tym momencie po prostu zastępowana, a nie dodawana.
+- Powyższa informacja nie dotrze do A ze względu na mechanizm zatruwania ścieżek. / NIE / Zatruwanie ścieżek (route poisoning) działa inaczej – polega na oznaczaniu całkowicie zerwanych lub niedostępnych tras nieskończonym kosztem (np. jako 16 skoków w RIP), aby szybko wygasić fałszywe informacje. Ten mechanizm nie blokuje przesyłania standardowych, poprawnych aktualizacji metryk (takich jak przesłana tu wartość 5) pomiędzy routerami.
 
 ## 3. Zaznacz prawdziwe zdania o sumach kontrolnych i kodach.
-- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi wykryć 3 błędy pojedynczych bitów. / TAK
-- Sumy kontrolne CRC stosowane są w warstwie łącza danych. / TAK
-- Kody MAC stosowane są do korekcji błędów transmisji. / NIE
-- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi skorygować 2 błędy pojedynczych bitów. / NIE
+- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi wykryć 3 błędy pojedynczych bitów. / TAK / Wzór na zdolność wykrywania błędów to d >= e + 1 (gdzie d to odległość Hamminga, a e to liczba błędów do wykrycia). Skoro odległość wynosi 4, kod z łatwością poradzi sobie z zauważeniem 3 błędów.
+- Sumy kontrolne CRC stosowane są w warstwie łącza danych. / TAK / Suma kontrolna CRC (Cykliczny Kod Nadmiarowy) jest fizycznie doklejana na samym końcu każdej ramki Ethernet (jako tzw. sekwencja FCS). Oznacza to, że sprawdza ona poprawność transmisji w warstwie łącza danych (warstwa 2).
+- Kody MAC stosowane są do korekcji błędów transmisji. / NIE / Kody MAC (Message Authentication Code) to pojęcie kryptograficzne. Służą one wyłącznie do upewnienia się, że nikt celowo nie podmienił wiadomości po drodze (autentyczność i integralność), ale nie posiadają wbudowanych mechanizmów do naprawiania uszkodzonych bitów.
+- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi skorygować 2 błędy pojedynczych bitów. / NIE / Wzór na zdolność korekcji (czyli nie tylko wykrycia, ale i naprawienia) błędów jest znacznie bardziej rygorystyczny: d >= 2e + 1. Przy odległości wynoszącej 4, ten kod gwarantuje bezbłędne naprawienie tylko 1 błędu. Do skorygowania 2 błędów potrzebowalibyśmy odległości wynoszącej minimum 5.
 
 ## 4. Zaznacz prawdziwe zdania
-- Mechanizm Go-Back-N jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno odbiorcy jest równe 1. / TAK
-- Mechanizm Stop-And-Wait jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno odbiorcy jest równe 1. / NIE
-- Mechanizm Stop-And-Wait jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno nadawcy jest równe 1. / TAK
-- Mechanizm Go-Back-N jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno nadawcy jest równe 1. / NIE
+- Mechanizm Go-Back-N jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno odbiorcy jest równe 1. / TAK / W Go-Back-N nadawca może wysłać wiele ramek na raz, ale odbiorca ma bufor (okno) o rozmiarze dokładnie 1. Oznacza to, że czeka tylko na jedną, konkretną ramkę w odpowiedniej kolejności. Jeśli dostanie ramkę z przyszłości (poza kolejnością), bezwzględnie ją odrzuca.
+- Mechanizm Stop-And-Wait jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno odbiorcy jest równe 1. / NIE / Samo stwierdzenie, że okno odbiorcy wynosi 1, to definicja protokołu Go-Back-N (patrz punkt wyżej). To, co wyróżnia mechanizm Stop-And-Wait na tle innych algorytmów, to ograniczenie po stronie nadawcy.
+- Mechanizm Stop-And-Wait jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno nadawcy jest równe 1. / TAK / Nazwa mówi sama za siebie ("zatrzymaj się i czekaj"). Nadawca "wypuszcza" w sieć tylko jedną ramkę (jego okno nadawcze wynosi 1) i zamraża transmisję do momentu, aż nie dostanie na nią potwierdzenia (ACK).
+- Mechanizm Go-Back-N jest szczególnym przypadkiem ogólnego mechanizmu okna przesuwnego, w którym okno nadawcy jest równe 1. / NIE / Zaletą mechanizmu Go-Back-N jest właśnie to, że okno nadawcy jest większe niż 1 (wynosi N). Dzięki temu nadawca nie musi tracić czasu na czekanie i może wysłać pakiet wielu ramek jedna po drugiej, zanim otrzyma pierwsze potwierdzenia.
 
 ## 5. Załóżmy, że interfejs enp0s0 jest już aktywny. Po wpisaniu linuksowego polecenia ip addr add 10.1.1.15/24 dev enp0s0 następujące ustawienia zostaną skonfigurowane dla sieci podłączonej do interfejsu enp0s0:
-- Brama domyślna zostanie ustawiona na 10.0.0.1. / NIE
-- Brama domyślna zostanie ustawiona na 10.1.1.1. / NIE
-- Adres rozgłoszeniowy zostanie ustawiony na 10.1.1.255. / TAK
-- Adres rozgłoszeniowy zostanie ustawiony na 10.255.255.255. / NIE
+- Brama domyślna zostanie ustawiona na 10.0.0.1. / NIE / Polecenie ip addr add służy wyłącznie do przypisania adresu IP oraz określenia rozmiaru podsieci na danym interfejsie. Konfiguracja routingu to osobny proces. Aby ustawić bramę domyślną, należy użyć polecenia ip route add default via <adres_bramy>.
+- Brama domyślna zostanie ustawiona na 10.1.1.1. / NIE / Polecenie ip addr add służy wyłącznie do przypisania adresu IP oraz określenia rozmiaru podsieci na danym interfejsie. Konfiguracja routingu to osobny proces. Aby ustawić bramę domyślną, należy użyć polecenia ip route add default via <adres_bramy>.
+- Adres rozgłoszeniowy zostanie ustawiony na 10.1.1.255. / TAK / Maska /24 (czyli 255.255.255.0) oznacza, że pierwsze trzy oktety określają sieć, a ostatni – hosty. System Linux samodzielnie kalkuluje z tego adres rozgłoszeniowy (broadcast), zmieniając bity hosta na same jedynki. Daje to w efekcie adres 10.1.1.255.
+- Adres rozgłoszeniowy zostanie ustawiony na 10.255.255.255. / NIE / Adres 10.255.255.255 zostałby wyliczony przez system tylko wtedy, gdybyś użył maski /8 (domyślnej dla starych sieci klasy A), czyli polecenia: ip addr add 10.1.1.15/8. My podaliśmy jednak precyzyjną maskę /24.
 
 ## 6. Tylko jedna poprawna odpowiedź. Na komputerze użytkownik uruchomił program ping, pingając adres innego komputera w lokalnej sieci ethernetowej. Co (i w jakiej kolejności) znajdzie się w wysyłanych przez kartę sieciową danych?
-- Nagłówek ramki, nagłówek pakietu IP, nagłówek ICMP, dane ICMP, suma kontrolna CRC / TAK
-- Nagłówek ramki, nagłówek ICMP, dane ICMP, suma kontrolna CRC / NIE
-- Nagłówek ramki, nagłówek pakietu IP, dane ICMP, suma kontrolna CRC / NIE
-- Nagłówek ramki, suma kontrolna CRC, nagłówek pakietu IP, nagłówek ICMP / NIE
+- Nagłówek ramki, nagłówek pakietu IP, nagłówek ICMP, dane ICMP, suma kontrolna CRC / TAK / Zadziałała tutaj zasada hermetyzacji (enkapsulacji). Program ping generuje dane i dodaje nagłówek ICMP. To trafia do warstwy sieciowej, która dokleja nagłówek IP. Na koniec trafia to do warstwy łącza danych (Ethernet), która dodaje nagłówek ramki na początku, a na samym końcu dokleja sumę kontrolną (CRC), aby zweryfikować poprawność całości.
+- Nagłówek ramki, nagłówek ICMP, dane ICMP, suma kontrolna CRC / NIE / Brakuje nagłówka IP. Komunikaty ICMP nie potrafią podróżować samodzielnie w samej ramce Ethernet – zawsze muszą być "zapakowane" w protokół IP, który nadaje im adresy źródłowe i docelowe.
+- Nagłówek ramki, nagłówek pakietu IP, dane ICMP, suma kontrolna CRC / NIE / Brakuje nagłówka ICMP. Bez niego odbiorca nie wiedziałby, czy przesłane dane to żądanie odpowiedzi (Echo Request), odpowiedź (Echo Reply), czy może informacja o błędzie.
+- Nagłówek ramki, suma kontrolna CRC, nagłówek pakietu IP, nagłówek ICMP / NIE / Błędna kolejność. Suma kontrolna CRC (tzw. sekwencja FCS w ramce Ethernet) z definicji znajduje się na samym końcu przesyłanych danych (jako zwiastun/trailer ramki), a nie w środku.
 
 ## 7. Które z poniższych zdań są prawdziwe w przypadku protokołu TCP?
-- Wykorzystuje algorytm okna przesuwnego. / TAK
-- Otrzymuje strumień danych z warstwy sieciowej i dzieli go na segmenty. / NIE
-- Potrafi dokonywać konwersji pomiędzy różnymi formatami plików. / NIE
-- Umożliwia kontrolę przepływu. / TAK
+- Wykorzystuje algorytm okna przesuwnego. / TAK / Okno przesuwne to fundament wydajności TCP. Pozwala nadawcy wysyłać wiele kolejnych segmentów danych bez konieczności zatrzymywania się i czekania na potwierdzenie (ACK) każdego z nich z osobna.
+- Otrzymuje strumień danych z warstwy sieciowej i dzieli go na segmenty. / NIE / Kierunek przepływu danych jest tu odwrotny. TCP odbiera strumień z warstwy aplikacji (z góry), dzieli go na mniejsze paczki (segmenty) i dopiero wtedy przesyła w dół do warstwy sieciowej (IP).
+- Potrafi dokonywać konwersji pomiędzy różnymi formatami plików. / NIE / TCP jest całkowicie "ślepe" na zawartość. Interesuje go tylko bezpieczne i bezbłędne przesłanie surowych bajtów. Konwersją plików, kodowaniem czy szyfrowaniem zajmują się wyższe warstwy (np. prezentacji lub aplikacji).
+- Umożliwia kontrolę przepływu. / TAK / Dzięki polu "rozmiar okna" w swoim nagłówku, TCP potrafi dynamicznie regulować prędkość transmisji, aby upewnić się, że szybki nadawca nie "zaleje" danymi wolniejszego odbiorcy.
 
 ## 8. Jądro systemu odebrało segment TCP w pakiecie IP i zapisało zawartość segmentu do bufora odbiorczego związanego z pewnym gniazdem. Na podstawie jakich informacji w segmencie zostało wybrane gniazdo?
 - Lokalny port / TAK / Port (np. 80 dla serwera WWW) to kluczowa informacja w nagłówku TCP. To on mówi systemowi operacyjnemu, do jakiej konkretnie aplikacji (do którego gniazda) mają trafić odebrane dane.
@@ -49,10 +49,10 @@
 - Rozmiar okna / NIE / Rozmiar okna (Window Size) to parametr w nagłówku TCP służący wyłącznie do kontroli przepływu (mówi o tym, ile wolnego miejsca w buforze ma odbiorca). Nie bierze udziału w procesie przydzielania pakietu do odpowiedniej aplikacji.
 
 ## 9. Jaka maska podsieci umożliwi wykorzystanie dokładnie 510 adresów IP do adresowania komputerów?
-- 255.255.254.0 / TAK
-- 255.255.252.0 / NIE
-- 255.255.255.0 / NIE
-- 255.255.0.0 / NIE
+- 255.255.254.0 / TAK / 2^n - 2, Maska 255.255.254.0 kończy się dokładnie dziewięcioma zerami w zapisie dwójkowym.
+- 255.255.252.0 / NIE / 2^n - 2
+- 255.255.255.0 / NIE / 2^n - 2
+- 255.255.0.0 / NIE / 2^n - 2
 
 ## 10. Które zdania dotyczące współczesnych wersji protokołu HTTP są prawdziwe?
 - Wykorzystuje protokół UDP / NIE / Klasyczne i najczęściej omawiane wersje HTTP (1.1 oraz 2) opierają się na niezawodnym protokole TCP, który gwarantuje, że dane dotrą w całości.
@@ -129,10 +129,10 @@
 - Zatruwanie ścieżki / TAK
 
 ## 22. Mechanizm kontroli przeciążenia wykorzystywany w TCP:
-- wymaga komunikatów kontrolnych wysyłanych przez routery / NIE
-- zakłada, że utrata pakietów nastąpiła na skutek przepełnienia kolejek / TAK
-- zakłada, że utrata pakietów nastąpiła na skutek błędów warstwy fizycznej / NIE
-- preferuje transmisje o większym czasie RTT / NIE
+- wymaga komunikatów kontrolnych wysyłanych przez routery / NIE / Klasyczny mechanizm kontroli przeciążenia w TCP działa w modelu end-to-end (od końca do końca). Nadawca sam wnioskuje, że sieć jest zakorkowana, obserwując opóźnienia i brak potwierdzeń. Nie polega na żadnych specjalnych komunikatach czy ostrzeżeniach generowanych przez pośredniczące routery.
+- zakłada, że utrata pakietów nastąpiła na skutek przepełnienia kolejek / TAK / To absolutnie fundamentalne założenie protokołu TCP. Skoro kable i światłowody rzadko psują dane, TCP przyjmuje w ciemno, że jeśli pakiet zginął, to z powodu przeciążenia w sieci – po prostu nie zmieścił się w przepełnionym buforze jakiegoś routera i został odrzucony. Po takim incydencie TCP natychmiast zwalnia tempo nadawania.
+- zakłada, że utrata pakietów nastąpiła na skutek błędów warstwy fizycznej / NIE / Jest dokładnie odwrotnie (patrz punkt wyżej). TCP zakłada, że sprzęt jest w miarę bezbłędny. Z tego powodu protokół ten czasami radzi sobie gorzej w sieciach bezprzewodowych (np. Wi-Fi), gdzie pakiety często gubią się przez zwykłe zakłócenia fizyczne. TCP błędnie interpretuje to jako korki w sieci i niepotrzebnie zmniejsza prędkość pobierania.
+- preferuje transmisje o większym czasie RTT / NIE / Czas RTT (Round Trip Time) to czas, jakiego pakiet potrzebuje na dotarcie do celu i powrót z potwierdzeniem. TCP faworyzuje połączenia o krótkim RTT. Im szybciej do nadawcy wracają potwierdzenia (ACK), tym szybciej jego "okno nadawcze" się powiększa i transmisja się rozpędza. Połączenia z dużym RTT (np. satelitarne) rozkręcają się znacznie wolniej.
 
 ## 23. Zaznacz prawdziwe zdania
 - Protokół BitTorrent służy do przesyłania plików / TAK
