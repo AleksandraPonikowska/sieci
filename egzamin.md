@@ -248,3 +248,91 @@
 - 800 m / NIE
 - 400 m / NIE
 - 160 m / TAK
+
+
+# 2013
+
+## 2. Protokol SSH
+- umozliwia prace zdalna / TAK
+- wykorzystuje uwierzytelnianie za pomoca kryptografii asymetrycznej / TAK
+- wykorzystuje szyfrowanie za pomoca kryptografii asymetrycznej / TAK
+- wykorzystuje szyfrowanie za pomoca kryptografii symetrycznej / TAK
+
+## 3. Zaznacz prawdziwe zdania o routingu hierarchicznym
+- stosowany jest wylacznie wewnatrz systemow autonomycznych / NIE
+- stosowany jest w internecie / TAK
+- pozwala zredukowac rozmiar tablicy routingu / TAK
+- jego istota jest przesylanie segmentow TCP w pakietach IP / NIE
+
+## 4. Ktore z ponziszych zdan sa prawdziwe w przypadku protokolu TCP?
+- otrzymuje strumien danych z wartswy sieciowej i dzieli go na segmenty / NIE
+- wszystkie gniazda sa gniazdami nasluchujacymi / NIE
+- potrafi dokonywac konwersji miedzy roznymi formatami plikow / TAK
+- wysylane dane sa potwierdzane / TAK
+
+## 5. Ktore z ponziszych informacji opisuja gniazdo polaczone?
+- zdalny port / TAK
+- MTU / NIE
+- lokalny port / TAK
+- zdalny adres IP / TAK
+
+## 6. Ktore z ponziszych zdan sa prawdziwe w przypadku Ethernetu?
+- podczas transmisji moga wystepowac kolizje / TAK
+- dostep do kanalu jest deterministyczny / NIE
+- komputery przekazuja sobie token, by uzyskac dostep do kanalu / TAK
+- wykorzystuje protokol CSMA/CA / NIE
+
+## 9. Tylko 1 poprawna odpowiedz
+Przy stosowaniu sumy kontrolnej crc opartej o wielomian x^2 + 1 do wiadomosci 100001 zostanie dolaczona suma kontrolna:
+- 1 / NIE
+- 10 / NIE
+- 11 / TAK
+- 01 / NIE
+
+## 10. Podczas modelowego kończenia polaczenia w protokole TCP:
+- przesylane sa dwa segmenty FIN / TAK
+- strona wykonujaca zamkniecie bierne bedzie pozniej w stanie TIME WAIT / NIE
+- strona, ktora wyslala pierwszy segment FIN, moze jeszcze potem nadawac dane / NIE
+- strona, ktora wyslala pierwszy segment FIN, moze jeszcze potem odbierac dane / TAK
+
+## 11. Ktore zdania dotyczace sieci bezprzewodowych 802.11 sa prawdziwe?
+- protokol wykorzystuje przeskakiwanie czestotliwosci (frequency hopping) / NIE
+- urzadzenia nadajace na takiej samej czestotliwosci wzajemnie sie zaklocaja / TAK
+- urzadzenia pracujace na pasmie 2,4 Ghz moga byc od sievie bardziej oddalone niz pracujace na pasmie 5 Ghz/ TAK
+- dostep do kanalu opiera sie na wykrywaniu kolizji tak jak w Ethernecie / NIE
+
+## 12. Po wpisaniu polecenia ifconfig eth0 10.1.1.15 nastepujace ustawienia zostana skonfigurowane dla sieci podlaczonej do interfejsu eth0:
+- adres rozgloszeniowy zsotanie ustawiony na 10.1.1.255 / TAK
+- brama domyslna zostanie ustawiona na 10.0.0.1 / NIE
+- polecenie zostanie odrzucone gdyz nie podani maski podsieci / NIE
+- brama domyslna zostanie ustawiona na 10.1.1.1 / NIE
+
+## 13. Ktore zdania dotyczace protokolu TCP sa prawdziwe?
+- RTO oznacza czas, po uplywie ktorego niepotwierdzony segment zostanie wyslany ponownie / TAK
+- wartosc RTO jest ustalana na podstawie zmierzonego czasu RTT / TAK
+- wartosc RTO jest ustalana za pomoca protokolu ICMP / NIE
+- wartosc RTO jest stala dla wszystkich segmentow i niezmienna przez caly czas trwania polaczenia / NIE
+
+## 14. Zaznacz prawdziwe zdania:
+- kanal simpleksowy umozliwia transmisje danych w obu kierunkach, ale tylko w jednym naraz / NIE
+- Ethernet oparty na koncentratorach umozliwia uzyskanie pelnego dupleksu / TAK
+- kanal poldupleksowy umozliwia transmisje danych tylko w jednym kierunku / NIE
+- kanal pelnodupleksowy umozliwia transmisje danych w obu kierunkacj naraz / TAK
+
+## 15. Zaznacz prawdziwe zdania:
+- Protokol FTP sluzy do przesylania poczty elektronicznej / NIE
+- Protokol FTP sluzy do przesylania plikow / NIE
+- Protokol SMTP sluzy do pobierania poczty elektronicznej z serwera / NIE
+- Protokol POP3 sluzy do wysylania poczty elektronicznej do serwera/ NIE
+
+## 16. Jakie informacje sa zawarte w naglowku UDP?
+- suma kontrolna / TAK
+- numer sekwencyjny / NIE
+- rozmiar okna / NIE
+- dlugosc / TAK
+
+## 20. Zaznacz prawdziwe zdania :
+- Protokol BOOTP zamienia adresy MAC na adresy IP / TAK
+- Protokol DNS zamienia nazwy domen na adresy IP/ TAK
+- Protokol ARP zamienia adresy IP na adresy MAC / TAK
+- Protokol DHCP zamienia adresy IP na adresy MAC / NIE
