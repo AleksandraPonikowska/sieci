@@ -300,11 +300,11 @@
 - urzadzenia pracujace na pasmie 2,4 Ghz moga byc od sievie bardziej oddalone niz pracujace na pasmie 5 Ghz/ TAK
 - dostep do kanalu opiera sie na wykrywaniu kolizji tak jak w Ethernecie / NIE
 
-## 12. Po wpisaniu polecenia ifconfig eth0 10.1.1.15 nastepujace ustawienia zostana skonfigurowane dla sieci podlaczonej do interfejsu eth0:
-- adres rozgloszeniowy zsotanie ustawiony na 10.1.1.255 / TAK
-- brama domyslna zostanie ustawiona na 10.0.0.1 / NIE
-- polecenie zostanie odrzucone gdyz nie podani maski podsieci / NIE
-- brama domyslna zostanie ustawiona na 10.1.1.1 / NIE
+## 12. Po wpisaniu polecenia if config eth0 10.1.1.15 nastepujace ustawienia zostana skonfigurowane dla sieci podlaczonej do interfejsu eth0:
+- adres rozgloszeniowy zsotanie ustawiony na 10.1.1.255 / TAK / jak nie poda się maski to bierze ją jako 255.255.255.0
+- brama domyslna zostanie ustawiona na 10.0.0.1 / NIE / nie ustawia bramek domyślnych, bo nie do tego służy
+- polecenie zostanie odrzucone gdyz nie podani maski podsieci / NIE / weźmie domyślną 255.255.255.0
+- brama domyslna zostanie ustawiona na 10.1.1.1 / NIE / nie ustawia bramek domyślnych, bo nie do tego służy
 
 ## 13. Ktore zdania dotyczace protokolu TCP sa prawdziwe?
 - RTO oznacza czas, po uplywie ktorego niepotwierdzony segment zostanie wyslany ponownie / TAK
@@ -319,10 +319,10 @@
 - kanal pelnodupleksowy umozliwia transmisje danych w obu kierunkacj naraz / TAK
 
 ## 15. Zaznacz prawdziwe zdania:
-- Protokol FTP sluzy do przesylania poczty elektronicznej / NIE
-- Protokol DNS sluzy do przesylania plikow / NIE
-- Protokol SMTP sluzy do pobierania poczty elektronicznej z serwera / NIE
-- Protokol POP3 sluzy do wysylania poczty elektronicznej do serwera/ NIE
+- Protokol FTP sluzy do przesylania poczty elektronicznej / NIE / FTP (File Transfer Protocol) służy wyłącznie do przesyłania plików między komputerem klienckim a serwerem
+- Protokol DNS sluzy do przesylania plikow / NIE / DNS (Domain Name System) to "książka telefoniczna" internetu. Zamienia przyjazne dla człowieka nazwy domen (np. onet.pl) na zrozumiałe dla komputerów adresy IP (np. 213.180.141.140).
+- Protokol SMTP sluzy do pobierania poczty elektronicznej z serwera / NIE / SMPT - do wysyłania, POP3 - do odbierania
+- Protokol POP3 sluzy do wysylania poczty elektronicznej do serwera/ NIE / SMPT - do wysyłania, POP3 - do odbierania
 
 ## 16. Jakie informacje sa zawarte w naglowku UDP?
 - suma kontrolna / TAK
