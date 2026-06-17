@@ -93,15 +93,15 @@
 - Po pewnym czasie serwer WWW wyśle żądanie o ponowne przesłanie zagubionego pakietu / NIE / Serwer fizycznie nie wie, że przeglądarka cokolwiek wysłała, skoro pakiet zgubił się po drodze. Serwer po prostu "milczy" i oczekuje na dane. Ciężar zorientowania się, że pakiet zaginął (na podstawie braku potwierdzenia), spoczywa wyłącznie na nadawcy.
 
 ## 16. Zaznacz prawdziwe zdania.
-- 44.44.44.44/30 jest adresem przypisywanym komputerowi / NIE
-- 127.127.127.127/25 jest adresem rozgłoszeniowym / TAK
-- 192.168.1.0/8 jest adresem sieci / NIE
-- 10.10.10.0/24 jest adresem sieci / TAK
+- 44.44.44.44/30 jest adresem przypisywanym komputerowi / NIE / maska mówi, że pierwsze 30 bitów określa sieć, tutaj dwie (32-30) ostatnie liczby to zera, więc jest to adres sieci
+- 127.127.127.127/25 jest adresem rozgłoszeniowym / TAK / maska mówi, że pierwsze 25 bitów określa sieć, a reszta ma być jedynkami - ostatnie 32-25 bitów jest jedynkami
+- 192.168.1.0/8 jest adresem sieci / NIE / maska mówi, że pierwsze 8 bitów określa sieć, a reszta ma być zerami - tutaj ostatnie 32-8 bitów nie jest zerami
+- 10.10.10.0/24 jest adresem sieci / TAK / maska mówi, że pierwsze 24 bitów określa sieć, a reszta ma być zerami - ostatnie 32-24 bity są zerami
 
 ## 17. Sieć 192.168.15.128/25 została podzielona na 5 rozłącznych podsieci, tak żeby każdy adres był w dokładnie jednej z nich. Czy podany adres może być adresem rozgłoszeniowym w jakiejś z tych podsieci?
 - 192.168.15.223 / TAK
 - 192.168.15.251 / NIE
-- 192.168.15.135 / NIE
+- 192.168.15.135 / TAK
 - 192.168.15.255 / TAK
 
 ## 18. Które zdania dotyczące programu traceroute są prawdziwe?
