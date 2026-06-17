@@ -493,3 +493,245 @@
 - Powoduje, że algorytmu tego nie można stosować w sieciach o średnicy równej 20. / TAK
 - W niektórych przypadkach pomaga pozbyć się pętli w routingu. / TAK
 - Zabezpiecza przed otrzymywaniem spamu. / NIE
+
+# 2025
+
+## 1. Jeśli maską podsieci jest /26, to następujący adres można przypisać komputerowi:
+- 172.13.160.1 / TAK
+- 10.23.1.32 / TAK
+- 192.23.1.192 / NIE
+- 10.3.1.191 / NIE
+
+## 2. Jakie mechanizmy zapobiegające kolizjom są wykorzystywane w sieciach bezprzewodowych WiFi?
+- CSMA/CA / TAK
+- RTS/CTS / TAK
+- ALOHA / NIE
+- CSMA/CD / NIE
+
+## 3. Do czego wykorzystywane jest pole portu docelowego w nagłówku UDP?
+- UDP nie zawiera takiego pola. / NIE
+- Do wyboru portu wyjściowego routera. / NIE
+- Do wyznaczania trasy pakietu do odbiorcy. / NIE
+- Do identyfikacji aplikacji na urządzeniu odbiorcy. / TAK
+
+## 4. Tylko jedna poprawna odpowiedź. Przez łącze 1 Mbit o czasie propagacji 2 ms przesyłamy 500-bajtowy pakiet. Ile czasu upłynie od nadania pierwszego bitu do otrzymania ostatniego bitu?
+- 6 ms / TAK
+- 4 ms / NIE
+- 2,5 ms / NIE
+- 18 ms / NIE
+
+## 5. Jakie są zastosowania mechanizmu HMAC?
+- Szyfrowanie danych za pomocą klucza symetrycznego. / NIE
+- Generowanie kluczy asymetrycznych. / NIE
+- Weryfikacja integralności wiadomości przy użyciu wspólnego sekretu. / TAK
+- Generowanie kluczy sesji. / NIE
+
+## 6. Zaznacz techniki routingu dynamicznego pomagające uniknąć cykli w routingu.
+- CSMA/CA. / NIE
+- Wykrywanie MTU dla ścieżki. / NIE
+- Wysyłanie informacji o całej ścieżce do adresu docelowego. / TAK
+- Zatruwanie ścieżki zwrotnej. / TAK
+
+## 7. Jakie są cechy tablicy routingu i tablicy przekazywania?
+- Tablica routingu jest zoptymalizowana pod kątem szybkiego wyszukiwania ścieżek. / NIE
+- Tablica przekazywania nie jest używana w przypadku konfiguracji routera za pomocą algorytmów routingu dynamicznego. / NIE
+- Tablica routingu jest używana tylko w routerach brzegowych. / NIE
+- Tablica przekazywania służy do podejmowania decyzji o następnym routerze na trasie pakietu. / TAK
+
+## 8. Zaznacz prawdziwe stwierdzenia dotyczące mechanizmu Explicit Congestion Notification (ECN).
+- ECN powoduje wyszukanie lepszej ścieżki w przypadku wykrycia przeciążenia. / NIE
+- ECN umożliwia routerom sygnalizowanie nadchodzącego przeciążenia bez odrzucania pakietów. / TAK
+- ECN wymaga współpracy zarówno nadawcy, jak i odbiorcy pakietów. / TAK
+- ECN automatycznie zwiększa przepustowość w przypadku wykrycia przeciążenia. / NIE
+
+## 9. Jakie zadanie wykonuje funkcja bind() w kontekście gniazd sieciowych?
+- Przypisuje określony adres IP i portu do gniazda. / TAK
+- Akceptuje nadchodzące połączenie. / NIE
+- Wysyła pakiet do określonego adresata. / NIE
+- Łączy dwa gniazda ze sobą. / NIE
+
+## 10. Zaznacz prawdziwe zdania o sumach kontrolnych i kodach.
+- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi wykryć 3 błędy pojedynczych bitów. / TAK
+- Kody MAC stosowane są do korekcji błędów transmisji. / NIE
+- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi skorygować 2 błędy pojedynczych bitów. / NIE
+- Sumy kontrolne CRC stosowane są w warstwie łącza danych. / TAK
+
+## 11. Tylko jedna poprawna odpowiedź. Użytkownik uruchomił ping do innego komputera w lokalnej sieci ethernetowej. Co (i w jakiej kolejności) znajdzie się w wysyłanych przez kartę sieciową danych?
+- Nagłówek ramki, nagłówek pakietu IP, nagłówek ICMP, dane ICMP, suma kontrolna CRC. / TAK
+- Nagłówek ramki, nagłówek pakietu IP, dane ICMP, suma kontrolna CRC. / NIE
+- Nagłówek ramki, nagłówek ICMP, dane ICMP, suma kontrolna CRC. / NIE
+- Nagłówek ramki, suma kontrolna CRC, nagłówek pakietu IP, nagłówek ICMP. / NIE
+
+## 12. Jakie informacje zawiera nagłówek pakietu IP?
+- Adres źródłowy IP. / TAK
+- Szyfrowanie wykorzystane w pakiecie. / NIE
+- Wersję protokołu HTTP. / NIE
+- Numer portu docelowego. / NIE
+
+## 13. Zakres 192.168.17.0/26 ma zostać podzielony na 3 rozłączne podsieci, tak żeby każdy adres był w dokładnie jednej z nich. Czy podany adres może być adresem rozgłoszeniowym w jakiejś z tych podsieci?
+- 192.168.17.15 / TAK
+- 192.168.17.31 / TAK
+- 192.168.17.63 / TAK
+- 192.168.17.7 / NIE
+
+## 14. Które zdania dotyczące protokołu TCP są prawdziwe?
+- Jeśli bufor odbiorcy się przepełnia, to informuje on o tym nadawcę komunikatem UDP. / NIE
+- Mechanizm opóźnionych potwierdzeń może zmniejszyć liczbę wysyłanych potwierdzeń. / TAK
+- Rozmiar okna jest ustalany przy nawiązywaniu połączenia i nie zmienia się później. / NIE
+- Jeśli bufor odbiorcy się przepełnia, to informuje on o tym nadawcę komunikatem ICMP. / NIE
+
+## 15. Zaznacz prawdziwe zdania o kontroli przeciążenia.
+- Kontrola przeciążenia zaimplementowana jest na urządzeniach końcowych. / TAK
+- Do implementacji kontroli przeciążenia wykorzystywany jest protokół ICMP. / NIE
+- Kontrola przeciążenia i przepływu to dwie nazwy oznaczające to samo. / NIE
+- Kontrola przeciążenia w TCP faworyzuje transmisje z mniejszym RTT. / TAK
+
+## 16. W sieci [A — przełącznik S — router R — B] komputer A wysyła wiadomość do komputera B. Co znajdzie się w Ethernetowej ramce z wiadomością w momencie jej wysyłania przez komputer?
+- Adres MAC karty przełącznika sieciowego S. / NIE
+- Adres MAC karty sieciowej komputera B. / NIE
+- Adres MAC karty sieciowej komputera A. / TAK
+- Adres MAC karty sieciowej routera R. / TAK
+
+## 17. Do wiadomości została dołączona suma CRC wykorzystująca wielomian x⁴+x²+1.
+- Dowolna zmiana polegająca na zmianie pojedynczego bitu zostanie wykryta. / TAK
+- Dowolna zmiana polegająca na zmianie dwóch kolejnych bitów zostanie wykryta. / TAK
+- Do wiadomości zostało dołączonych 5 bitów sumy kontrolnej. / NIE
+- Dowolna zmiana polegająca na zmianie trzech dowolnych bitów zostanie wykryta. / NIE
+
+## 18. Zaznacz prawdziwe zdania o atakach typu DoS (denial of service).
+- Atak DoS wymaga tunelowania. / NIE
+- Atak DoS wymaga fałszowania adresów IP. / NIE
+- Rozproszony atak DoS oznacza, że wiele komputerów jest atakowanych jednocześnie. / NIE
+- Odbity atak DoS może być wykonany tylko jeśli atakujący posiada wiele komputerów. / NIE
+
+## 19. Które z poniższych rozwiązań pomagają w walce ze spamem?
+- ARP spoofing. / NIE
+- Sender Policy Framework. / TAK
+- Uwierzytelnianie SMTP. / TAK
+- Anonimizujące serwery proxy. / NIE
+
+## 20. Co umożliwia protokół IP?
+- Przesyłanie danych w sieci w sposób niezawodny. / NIE
+- Ustanawianie połączenia między dwoma komputerami. / NIE
+- Identyfikację aplikacji za pomocą portów. / NIE
+- Bezpołączeniowe przesyłanie pakietów między dwoma komputerami. / TAK
+
+## 21. Jakie techniki można zastosować, żeby podsłuchiwać ruch w sieci LAN korzystającej z przełączanego Ethernetu?
+- Podstawienie własnego serwera DHCP. / TAK
+- Zatruwanie pamięci podręcznej serwera DNS. / NIE
+- Przepełnianie pamięci CAM przełącznika. / TAK
+- Mechanizm AIMD. / NIE
+
+## 22. Załóżmy, że interfejs enp0s0 jest już aktywny. Po wpisaniu polecenia `ip addr add 192.0.0.2/16 dev enp0s0` następujące ustawienia zostaną skonfigurowane dla sieci podłączonej do interfejsu enp0s0:
+- Adres rozgłoszeniowy zostanie ustawiony na 192.0.0.255. / NIE
+- Brama domyślna zostanie ustawiona na 192.0.0.0. / NIE
+- Adres rozgłoszeniowy zostanie ustawiony na 192.0.255.255. / NIE
+- Brama domyślna zostanie ustawiona na 192.0.0.1. / NIE
+
+## 23. Podczas modelowego kończenia połączenia w protokole TCP:
+- serwer zawsze wykonuje zamknięcie jako drugi. / NIE
+- jednym z zadań stanu TIME_WAIT jest poprawne usunięcie duplikatów pakietów. / TAK
+- przesyłane są dwa segmenty z ustawioną flagą FIN. / TAK
+- strona wykonująca zamknięcie jako pierwsza będzie później w stanie TIME_WAIT. / TAK
+
+## 24. Zaznacz prawdziwe zdania dotyczące protokołu ICMP.
+- Wykorzystuje port 68 do komunikacji. / NIE
+- Umożliwia działanie programowi ping. / TAK
+- Umożliwia testowanie warstwy sieciowej. / TAK
+- Jest protokołem warstwy transportowej. / NIE
+
+## 25. Zaznacz prawdziwe zdania o algorytmie RSA.
+- Jeśli potrafilibyśmy szybko rozkładać liczby na czynniki pierwsze, to potrafilibyśmy złamać RSA. / TAK
+- Jest algorytmem szyfrowania symetrycznego. / NIE
+- Jest algorytmem szyfrowania asymetrycznego. / TAK
+- Może być wykorzystany do szyfrowania, ale nie do podpisów cyfrowych. / NIE
+
+## 26. Zaznacz prawdziwe zdania.
+- ARP i DHCP służą do kontroli przepływu. / NIE
+- DHCP umożliwia przydzielenie adresu IP na podstawie adresu MAC. / TAK
+- ARP służy do tłumaczenia adresów IP na adresy MAC. / TAK
+- DHCP umożliwia przydzielenie adresu MAC na podstawie adresu IP. / NIE
+
+## 27. Które zdania dotyczące domeny in-addr.arpa są prawdziwe?
+- Strefa 11.22.33.in-addr.arpa zawiera informacje na temat sieci 33.22.11.0/24. / TAK
+- Domena in-addr.arpa wykorzystuje głównie rekord CNAME. / NIE
+- Strefa 11.22.33.in-addr.arpa zawiera informacje na temat sieci 11.22.33.0/24. / NIE
+- Domena in-addr.arpa służy do dokonywania konwersji z adresu IP na nazwę domeny. / TAK
+
+## 28. Zaznacz prawdziwe zdania dotyczące protokołu IPv6.
+- IPv6 zapewnia niezawodne dostarczanie danych. / NIE
+- Pakiety IPv6 są zawsze enkapsulowane w pakietach IPv4. / NIE
+- Adresem pętli lokalnej (loopback) jest ::1/128. / TAK
+- Adresem pętli lokalnej (loopback) jest 0000:0000:0000:0000:0000:0000:0000:0001/128. / TAK
+
+## 29. Aplikacja ma dostęp do połączonego gniazda TCP o deskryptorze fd (tryb blokujący). Zmienna data jest wskaźnikiem na bufor o rozmiarze 1000 bajtów. Zaznacz prawdziwe zdania.
+- Wywołanie read(fd,data,300) może spowodować wysłanie segmentu informującego o zmianie rozmiaru okna odbiorczego. / TAK
+- Jeśli wywołanie read(fd,data,300) zwróci wartość 0, to druga strona połączenia już nic więcej nie wyśle. / TAK
+- Jeśli wywołanie write(fd,data,1000) zwróci wartość 500, to oznacza, że wystąpił błąd połączenia. / NIE
+- Wywołanie write(fd,data,1000) może zwrócić wartość większą od 1000, bo funkcja zwraca liczbę faktycznie wysłanych bajtów, wliczając w to nagłówek pakietu. / NIE
+
+## 30. Tylko jedna poprawna odpowiedź. Wysłanie bitu zajmuje 1/50 µs, ramki mają po 50 bajtów (400 bitów), sygnał rozchodzi się z prędkością 100 000 km/s. Maksymalna odległość między dwoma komputerami umożliwiająca działanie CSMA/CD?
+- 160 m / NIE
+- 800 m / NIE
+- 400 m / TAK
+- 1600 m / NIE
+
+## 31. Jakie są cechy metod GET i POST w HTTP?
+- Rozmiar danych w przypadku metody GET jest ograniczony długością URL. / TAK
+- Hasła przesyłane w treści żądania POST będą widoczne w pasku adresu przeglądarki. / NIE
+- Żądania GET mogą być zapisywane w historii przeglądarki. / TAK
+- W HTTP/2 nie stosuje się metody GET. / NIE
+
+## 32. Tylko jedna poprawna odpowiedź. Która warstwa odpowiada za łączenie segmentów w odpowiedniej kolejności w strumień danych?
+- Warstwa transportowa. / TAK
+- Warstwa aplikacji. / NIE
+- Warstwa łącza danych. / NIE
+- Warstwa sieciowa. / NIE
+
+## 33. Sieci: S₁ — 40 komputerów, S₂ — 50 komputerów, S₃ — 60 komputerów. Pula adresów 10.20.30.0/24. Zaznacz poprawne przypisania adresów.
+- 10.20.30.0/25 dla S₁, 10.20.30.128/25 dla S₂ i 10.20.30.0/24 dla S₃. / NIE
+- 10.20.30.0/26 dla S₁, 10.20.30.64/25 dla S₂ i 10.20.30.192/26 dla S₃. / NIE
+- 10.20.30.0/26 dla S₁, 10.20.30.64/26 dla S₂ i 10.20.30.128/25 dla S₃. / TAK
+- 10.20.30.0/26 dla S₁, 10.20.30.64/26 dla S₂ i 10.20.30.128/26 dla S₃. / TAK
+
+## 34. Tylko jedna poprawna odpowiedź. A: 192.168.2.100/25, router R: 192.168.2.1/25 (brama domyślna A), między nimi przełącznik; pamięć ARP pusta. Co nastąpi jako pierwsze, jeśli komputer chce wysłać ramkę z pakietem do adresu 192.168.2.200?
+- Komputer roześle (do adresu rozgłoszeniowego) zapytanie ARP o adres 192.168.2.200. / NIE
+- Komputer wyśle ramkę do przełącznika, a przełącznik wyśle ją do odpowiedniego adresu. / NIE
+- Komputer roześle (do adresu rozgłoszeniowego) zapytanie ARP o adres 192.168.2.1. / TAK
+- Komputer wyśle zapytanie ARP o adres 192.168.2.200 do bramy domyślnej. / NIE
+
+## 35. Technika „wybijania dziur" w NAT (hole punching):
+- działa w przypadku symetrycznych NAT. / NIE
+- działa w przypadku asymetrycznych NAT. / TAK
+- wymaga pośrednictwa zewnętrznego serwera. / TAK
+- stosowana jest, jeśli obie strony komunikacji mają prywatne adresy IP. / TAK
+
+## 36. Jakie mechanizmy są wykorzystywane do kontroli przeciążenia w protokole TCP?
+- Szybka retransmisja. / TAK
+- Mechanizm predykcji błędów. / NIE
+- AIMD (Additive Increase, Multiplicative Decrease). / TAK
+- Algorytm najkrótszej ścieżki. / NIE
+
+## 37. Co robi źródłowy NAT (translacja adresów sieciowych)?
+- Zamienia jedne adresy IP na inne. / TAK
+- Może zmieniać docelowy port. / NIE
+- Zamienia adresy IP na MAC. / NIE
+- Może zmieniać źródłowy port. / TAK
+
+## 38. Zaznacz prawdziwe zdania dotyczące przełączników sieciowych.
+- Przełączniki uczą się adresów MAC urządzeń podłączonych do poszczególnych portów. / TAK
+- Przełączniki zawsze przesyłają ramki do wszystkich portów. / NIE
+- Przełączniki przekazują ramkę broadcast tylko do portu, z którego ramka przyszła. / NIE
+- Za pomocą przełączników możliwe jest wyeliminowanie kolizji w sieciach przewodowych. / TAK
+
+## 39. Zaznacz prawdziwe stwierdzenia dotyczące tablic routingu.
+- Tablice routingu mogą być aktualizowane dynamicznie przez protokoły routingu. / TAK
+- Każdy router w danym systemie autonomicznym ma taką samą tablicę routingu. / NIE
+- Reguły z tablicy routingu określają, co zrobić z pakietem o określonym adresie docelowym MAC. / NIE
+- Wszystkie reguły w tablicy routingu muszą mieć tę samą długość prefiksu. / NIE
+
+## 40. Który z poniższych protokołów działa w warstwie transportowej?
+- ICMP / NIE
+- IP / NIE
+- ARP / NIE
+- TCP / TAK
