@@ -265,9 +265,9 @@
 - jego istota jest przesylanie segmentow TCP w pakietach IP / NIE
 
 ## 4. Ktore z ponziszych zdan sa prawdziwe w przypadku protokolu TCP?
-- otrzymuje strumien danych z wartswy sieciowej i dzieli go na segmenty / NIE
+- otrzymuje strumien danych z wartswy sieciowej i dzieli go na segmenty / NIE / Kierunek przepływu danych jest tu odwrotny. TCP odbiera strumień z warstwy aplikacji (z góry), dzieli go na mniejsze paczki (segmenty) i dopiero wtedy przesyła w dół do warstwy sieciowej (IP).
 - wszystkie gniazda sa gniazdami nasluchujacymi / NIE
-- potrafi dokonywac konwersji miedzy roznymi formatami plikow / TAK
+- potrafi dokonywac konwersji miedzy roznymi formatami plikow / NIE
 - wysylane dane sa potwierdzane / TAK
 
 ## 5. Ktore z ponziszych informacji opisuja gniazdo polaczone?
@@ -283,10 +283,10 @@
 - wykorzystuje protokol CSMA/CA / NIE
 
 ## 9. Tylko 1 poprawna odpowiedz: Przy stosowaniu sumy kontrolnej crc opartej o wielomian x^2 + 1 do wiadomosci 100001 zostanie dolaczona suma kontrolna:
-- 1 / NIE
-- 10 / NIE
-- 11 / TAK
-- 01 / NIE
+- 1 / NIE /dopisujemy do 100001 dwa zera (bo stopień wielomianu = 2), a potem dzielimy binarnie przez 101
+- 10 / NIE/dopisujemy do 100001 dwa zera (bo stopień wielomianu = 2), a potem dzielimy binarnie przez 101
+- 11 / TAK/dopisujemy do 100001 dwa zera (bo stopień wielomianu = 2), a potem dzielimy binarnie przez 101
+- 01 / NIE/dopisujemy do 100001 dwa zera (bo stopień wielomianu = 2), a potem dzielimy binarnie przez 101
 
 ## 10. Podczas modelowego kończenia polaczenia w protokole TCP:
 - przesylane sa dwa segmenty FIN / TAK
