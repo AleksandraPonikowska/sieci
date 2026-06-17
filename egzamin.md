@@ -321,7 +321,7 @@ Przy stosowaniu sumy kontrolnej crc opartej o wielomian x^2 + 1 do wiadomosci 10
 
 ## 15. Zaznacz prawdziwe zdania:
 - Protokol FTP sluzy do przesylania poczty elektronicznej / NIE
-- Protokol FTP sluzy do przesylania plikow / NIE
+- Protokol DNS sluzy do przesylania plikow / NIE
 - Protokol SMTP sluzy do pobierania poczty elektronicznej z serwera / NIE
 - Protokol POP3 sluzy do wysylania poczty elektronicznej do serwera/ NIE
 
