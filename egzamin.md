@@ -289,7 +289,7 @@
 - komputery przekazuja sobie token, by uzyskac dostep do kanalu / TAK
 - wykorzystuje protokol CSMA/CA / NIE
 
-# 7. Komputer z prywatnym adresem IP 192.168.0.10 wysłał segment TCP do serwera WWW i do serwera DNS (różne adresy docelowe), w obu przypadkach z portu źródłowego 12345, a pośredniczący router z NAT przetłumaczył oba na ten sam adres i port zewnętrzny. Co można powiedzieć o routerze?
+## 7. Komputer z prywatnym adresem IP 192.168.0.10 wysłał segment TCP do serwera WWW i do serwera DNS (różne adresy docelowe), w obu przypadkach z portu źródłowego 12345, a pośredniczący router z NAT przetłumaczył oba na ten sam adres i port zewnętrzny. Co można powiedzieć o routerze?
 - Router musi być symetrycznym NAT. / NIE
 - Router może być asymetrycznym ograniczonym (restricted cone) NAT. / TAK
 - Router może być asymetrycznym ograniczonym portowo (port-restricted cone) NAT. / TAK
