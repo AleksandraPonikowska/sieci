@@ -551,9 +551,9 @@
 - Łączy dwa gniazda ze sobą. / NIE
 
 ## 10. Zaznacz prawdziwe zdania o sumach kontrolnych i kodach.
-- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi wykryć 3 błędy pojedynczych bitów. / TAK
+- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi wykryć 3 błędy pojedynczych bitów. / TAK / d >= e + 1, czyli dla d=4, max e=3
 - Kody MAC stosowane są do korekcji błędów transmisji. / NIE
-- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi skorygować 2 błędy pojedynczych bitów. / NIE
+- Jeśli odległość Hamminga między dowolną parą kodów wynosi co najmniej 4, to takie kodowanie potrafi skorygować 2 błędy pojedynczych bitów. / NIE / d >= 2e + 1, czyli dla d=4, max e=1
 - Sumy kontrolne CRC stosowane są w warstwie łącza danych. / TAK
 
 ## 11. Tylko jedna poprawna odpowiedź. Użytkownik uruchomił ping do innego komputera w lokalnej sieci ethernetowej. Co (i w jakiej kolejności) znajdzie się w wysyłanych przez kartę sieciową danych?
@@ -587,10 +587,10 @@
 - Kontrola przeciążenia w TCP faworyzuje transmisje z mniejszym RTT. / TAK
 
 ## 16. W sieci [A — przełącznik S — router R — B] komputer A wysyła wiadomość do komputera B. Co znajdzie się w Ethernetowej ramce z wiadomością w momencie jej wysyłania przez komputer?
-- Adres MAC karty przełącznika sieciowego S. / NIE
-- Adres MAC karty sieciowej komputera B. / NIE
-- Adres MAC karty sieciowej komputera A. / TAK
-- Adres MAC karty sieciowej routera R. / TAK
+- Adres MAC karty przełącznika sieciowego S. / NIE /Przełącznik (switch) działa w warstwie 2 i dla komputera A jest urządzeniem "przezroczystym". Komputer A nie adresuje ramek do przełącznika, ponieważ przełącznik nie jest odbiorcą wiadomości; on jedynie przekazuje ramki dalej na podstawie ich adresów MAC.
+- Adres MAC karty sieciowej komputera B. / NIE / Komputer A wie (dzięki maski podsieci), że komputer B znajduje się w innej sieci. W związku z tym, A nie może wysłać ramki bezpośrednio do B. Adres MAC B byłby użyty tylko wtedy, gdyby oba komputery były w tej samej podsieci.
+- Adres MAC karty sieciowej komputera A. / TAK /To jest adres źródłowy ramki, a nie docelowy. W ramce Ethernet z wiadomością, jako adres docelowy, musi znaleźć się adres MAC urządzenia, które ma odebrać tę ramkę na tym konkretnym etapie trasy.
+- Adres MAC karty sieciowej routera R. / TAK /To jest poprawna odpowiedź dla adresu docelowego. Ponieważ komputer A chce wysłać dane do innej sieci, wysyła je do swojej "bramy domyślnej" (Default Gateway), czyli interfejsu routera R. Komputer A użyje protokołu ARP, aby poznać adres MAC routera R przypisany do jego adresu IP i umieści ten adres MAC jako docelowy w ramce Ethernet.
 
 ## 17. Do wiadomości została dołączona suma CRC wykorzystująca wielomian x⁴+x²+1.
 - Dowolna zmiana polegająca na zmianie pojedynczego bitu zostanie wykryta. / TAK
