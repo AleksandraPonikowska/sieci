@@ -494,7 +494,7 @@
 - W niektórych przypadkach pomaga pozbyć się pętli w routingu. / TAK
 - Zabezpiecza przed otrzymywaniem spamu. / NIE
 
-# 2013 B
+# 2013B
 
 ## 28. Tylko jedna poprawna odpowiedź. Przy stosowaniu sumy kontrolnej CRC opartej o wielomian x²+1 do wiadomości 100001 zostanie dołączona suma kontrolna:
 - 11 / TAK
