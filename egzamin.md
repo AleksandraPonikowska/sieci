@@ -250,7 +250,14 @@
 - 160 m / TAK
 
 
+
 # 2013
+
+## 1. Sieci S₁ i S₂ są połączone za pomocą routera. Komputer w sieci S₁ wysyła pakiet IP do komputera w sieci S₂, wkładając go uprzednio w ramkę. Co zrobi router?
+- Zmodyfikuje adres docelowy ramki. / TAK
+- Zmodyfikuje adres docelowy pakietu IP. / NIE
+- Podzieli pakiet na fragmenty, jeśli MTU sieci S₂ jest mniejsze niż rozmiar pakietu. / TAK
+- Przekaże otrzymaną ramkę bez zmian do sieci S₂. / NIE
 
 ## 2. Protokol SSH
 - umozliwia prace zdalna / TAK
@@ -281,6 +288,18 @@
 - dostep do kanalu jest deterministyczny / NIE
 - komputery przekazuja sobie token, by uzyskac dostep do kanalu / TAK
 - wykorzystuje protokol CSMA/CA / NIE
+
+# 7. Komputer z prywatnym adresem IP 192.168.0.10 wysłał segment TCP do serwera WWW i do serwera DNS (różne adresy docelowe), w obu przypadkach z portu źródłowego 12345, a pośredniczący router z NAT przetłumaczył oba na ten sam adres i port zewnętrzny. Co można powiedzieć o routerze?
+- Router musi być symetrycznym NAT. / NIE
+- Router może być asymetrycznym ograniczonym (restricted cone) NAT. / TAK
+- Router może być asymetrycznym ograniczonym portowo (port-restricted cone) NAT. / TAK
+- Router może być pełnym asymetrycznym (full cone) NAT. / TAK
+
+## 8. W jakich warstwach używane są poniższe mechanizmy?
+- Typ MIME stosowany jest w warstwie transportowej. / NIE
+- Suma CRC wykorzystywana jest w warstwie łącza danych. / TAK
+- Routing stosowany jest w warstwie aplikacji. / NIE
+- Nawiązywanie połączenia stosowane jest w warstwie transportowej. / TAK
 
 ## 9. Tylko 1 poprawna odpowiedz: Przy stosowaniu sumy kontrolnej crc opartej o wielomian x^2 + 1 do wiadomosci 100001 zostanie dolaczona suma kontrolna:
 - 1 / NIE /dopisujemy do 100001 dwa zera (bo stopień wielomianu = 2), a potem dzielimy binarnie przez 101
@@ -330,17 +349,30 @@
 - rozmiar okna / NIE
 - dlugosc / TAK
 
+## 17. Jeśli maską podsieci jest /28, to następujący adres można przypisać komputerowi:
+- 172.13.160.1 / TAK
+- 10.3.1.160 / NIE
+- 10.28.1.250 / TAK
+- 192.23.1.191 / NIE
+
+## 18. Protokół ICMP:
+- Umożliwia kontrolę przeciążeń. / NIE
+- Umożliwia działanie programowi ping. / TAK
+- Wykorzystuje port 23 do komunikacji. / NIE
+- Wykorzystuje port 63 do komunikacji. / NIE
+
+## 19. Zaznacz prawdziwe zdania o atakach typu DoS (denial of service).
+- Odbity atak DoS może być wykonany tylko jeśli atakujący posiada wiele komputerów. / NIE
+- Rozproszony atak DoS oznacza, że wiele komputerów jest atakowanych jednocześnie. / NIE
+- Atak DoS wymaga fałszowania adresów IP. / NIE
+- Do wykrywania źródła ataku można wykorzystać protokół ICMP traceback. / TAK
+
 ## 20. Zaznacz prawdziwe zdania :
 - Protokol BOOTP zamienia adresy MAC na adresy IP / TAK
 - Protokol DNS zamienia nazwy domen na adresy IP/ TAK
 - Protokol ARP zamienia adresy IP na adresy MAC / TAK
 - Protokol DHCP zamienia adresy IP na adresy MAC / NIE
 
-## 20. Zaznacz prawdziwe zdania.
-- Protokół BOOTP zamienia adresy MAC na adresy IP. / TAK
-- Protokół DNS zamienia nazwy domen na adresy IP. / TAK
-- Protokół ARP zamienia adresy IP na adresy MAC. / TAK
-- Protokół DHCP zamienia adresy IP na adresy MAC. / NIE
 
 ## 21. Sieć 192.168.17.0/26 została podzielona na 3 rozłączne podsieci, tak żeby każdy adres był w dokładnie jednej z nich. Jaki adres na pewno nie może być adresem rozgłoszeniowym w żadnej z tych podsieci?
 - 192.168.17.31 / NIE
@@ -462,31 +494,33 @@
 - W niektórych przypadkach pomaga pozbyć się pętli w routingu. / TAK
 - Zabezpiecza przed otrzymywaniem spamu. / NIE
 
-## 280. Tylko jedna poprawna odpowiedź. Przy stosowaniu sumy kontrolnej CRC opartej o wielomian x²+1 do wiadomości 100001 zostanie dołączona suma kontrolna:
+# 2013 B
+
+## 28. Tylko jedna poprawna odpowiedź. Przy stosowaniu sumy kontrolnej CRC opartej o wielomian x²+1 do wiadomości 100001 zostanie dołączona suma kontrolna:
 - 11 / TAK
 - 01 / NIE
 - 10 / NIE
 - 1 / NIE
 
-## 290. Zakres adresów 123.0.0.0/18 ma zostać podzielony na 6 rozłącznych sieci, tak żeby każdy adres był w dokładnie jednej z nich. Co można powiedzieć o wielkościach tych podsieci?
+## 29. Zakres adresów 123.0.0.0/18 ma zostać podzielony na 6 rozłącznych sieci, tak żeby każdy adres był w dokładnie jednej z nich. Co można powiedzieć o wielkościach tych podsieci?
 - Możliwe jest stworzenie podsieci o masce /22 / TAK
 - Możliwe jest stworzenie podsieci o masce /24 / NIE
 - Możliwe jest stworzenie podsieci o masce /19 / TAK
 - Możliwe jest stworzenie podsieci o masce /23 / TAK
 
-## 300. W jakich warstwach używane są poniższe mechanizmy?
+## 30. W jakich warstwach używane są poniższe mechanizmy?
 - Nawiązywanie połączenia stosowane jest w warstwie transportowej. / TAK
 - Typ MIME stosowany jest w warstwie transportowej. / NIE
 - Routing stosowany jest w warstwie aplikacji. / NIE
 - Suma CRC wykorzystywana jest w warstwie łącza danych. / TAK
 
-## 310. Protokół ICMP.
+## 31. Protokół ICMP.
 - Umożliwia działanie programowi ping. / TAK
 - Umożliwia kontrolę przeciążeń. / NIE
 - Wykorzystuje port 23 do komunikacji. / NIE
 - Wykorzystuje port 63 do komunikacji. / NIE
 
-## 320. Tylko jedna poprawna odpowiedź. Klient DNS pyta serwer DNS o nazwę domeny skojarzoną z adresem 10.20.30.40.
+## 32. Tylko jedna poprawna odpowiedź. Klient DNS pyta serwer DNS o nazwę domeny skojarzoną z adresem 10.20.30.40.
 - Klient wyśle zapytanie o rekord A związany z domeną 10.20.30.40 / NIE
 - Klient wyśle zapytanie o rekord A związany z domeną 10.20.30.40.in-addr.arpa / NIE
 - Klient wyśle zapytanie o rekord PTR związany z domeną 40.30.20.10.in-addr.arpa / TAK
