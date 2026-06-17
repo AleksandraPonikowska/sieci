@@ -82,5 +82,47 @@ export const tematy = {
       "nazwa": "NAT, diagnostyka i mechanizmy sieciowe", 
       "tasks": [7, 8, 9, 11, 29] 
     }
+  ],
+  "2025": [
+    { 
+      "id": "1", 
+      "nazwa": "Podstawy adresacji i podsieci (Obliczenia)", 
+      "tasks": [1, 4, 13, 30, 33] 
+    },
+    { 
+      "id": "2", 
+      "nazwa": "Mechanizmy routingu i architektura sieci", 
+      "tasks": [6, 7, 12, 20, 28, 39] 
+    },
+    { 
+      "id": "3", 
+      "nazwa": "Protokół TCP: Połączenia i kontrola", 
+      "tasks": [8, 14, 15, 23, 36] 
+    },
+    { 
+      "id": "4", 
+      "nazwa": "Warstwa transportowa, UDP i Gniazda", 
+      "tasks": [3, 9, 29, 32, 40] 
+    },
+    { 
+      "id": "5", 
+      "nazwa": "Warstwa łącza, transmisja i Ethernet", 
+      "tasks": [2, 10, 16, 17, 38] 
+    },
+    { 
+      "id": "6", 
+      "nazwa": "Usługi sieciowe i Warstwa Aplikacji", 
+      "tasks": [26, 27, 31] 
+    },
+    { 
+      "id": "7", 
+      "nazwa": "Bezpieczeństwo, Szyfrowanie i Ataki", 
+      "tasks": [5, 18, 19, 21, 25] 
+    },
+    { 
+      "id": "8", 
+      "nazwa": "NAT, diagnostyka i mechanizmy sieciowe", 
+      "tasks": [11, 22, 24, 34, 35, 37] 
+    }
   ]
 };
