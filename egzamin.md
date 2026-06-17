@@ -149,7 +149,7 @@
 ## 25. Które zdania dotyczące szyfrowania są prawdziwe?
 - RSA jest szyfrem monoalfabetycznym / NIE
 - Algorytmy szyfrowania asymetrycznego są zazwyczaj wolniejsze niż algorytmy szyfrowania symetrycznego / TAK
-- One-time pad - jest szyfrem monoalfabetycznym / NIE
+- One-time pad - jest szyfrem monoalfabetycznym / NIE / Szyfr polialfabetyczny (a w zasadzie "nieskończenie-alfabetyczny"), w którym jeden znak tekstu jawnego może przyjąć dowolną postać w tekście zaszyfrowanym w zależności od losowego klucza.
 - W algorytmach szyfrowania symetrycznego wiadomość szyfrujemy i deszyfrujemy za pomocą tego samego klucza / TAK
 
 ## 26. Adres 123.5.66.63 jest adresem rozgłoszeniowym przy masce podsieci:
@@ -185,7 +185,7 @@
 - ip link 10.20.30.40 / NIE
 
 
-## 31. Tylko jedna poprawna odpowiedź. Przez łącze 1 Mbit o czasie propagacji 2 ms ($ms = 10^{-3}\ s$) przesyłamy 500-bajtowy pakiet. Ile czasu upłynie od momentu nadania pierwszego bitu do momentu otrzymania ostatniego bitu?
+## 31. Tylko jedna poprawna odpowiedź. Przez łącze 1 Mbit o czasie propagacji 2 ms (ms = 10^-3) przesyłamy 500-bajtowy pakiet. Ile czasu upłynie od momentu nadania pierwszego bitu do momentu otrzymania ostatniego bitu?
 - 2,5 ms / NIE
 - 4 ms / NIE
 - 18 ms / NIE
@@ -335,3 +335,159 @@
 - Protokol DNS zamienia nazwy domen na adresy IP/ TAK
 - Protokol ARP zamienia adresy IP na adresy MAC / TAK
 - Protokol DHCP zamienia adresy IP na adresy MAC / NIE
+
+## 20. Zaznacz prawdziwe zdania.
+- Protokół BOOTP zamienia adresy MAC na adresy IP. / TAK
+- Protokół DNS zamienia nazwy domen na adresy IP. / TAK
+- Protokół ARP zamienia adresy IP na adresy MAC. / TAK
+- Protokół DHCP zamienia adresy IP na adresy MAC. / NIE
+
+## 21. Sieć 192.168.17.0/26 została podzielona na 3 rozłączne podsieci, tak żeby każdy adres był w dokładnie jednej z nich. Jaki adres na pewno nie może być adresem rozgłoszeniowym w żadnej z tych podsieci?
+- 192.168.17.31 / NIE
+- 192.168.17.63 / NIE
+- 192.168.17.255 / TAK
+- 192.168.17.15 / NIE
+
+## 22. Tylko jedna poprawna odpowiedź. Klient DNS pyta serwer DNS o nazwę domeny skojarzoną z adresem 10.20.30.40.
+- Klient wyśle zapytanie o rekord A związany z domeną 40.30.20.10.in-addr.arpa / NIE
+- Klient wyśle zapytanie o rekord A związany z domeną 10.20.30.40.in-addr.arpa / NIE
+- Klient wyśle zapytanie o rekord PTR związany z domeną 10.20.30.40.in-addr.arpa / NIE
+- Klient wyśle zapytanie o rekord PTR związany z domeną 40.30.20.10.in-addr.arpa / TAK
+
+## 23. Tylko jedna poprawna odpowiedź. Przeglądarka WWW nawiązuje połączenie z serwerem WWW. Pakiet zawierający całe żądanie HTTP gubi się. Co się stanie?
+- Po pewnym czasie przeglądarka WWW wyśle zapytanie ARP. / NIE
+- Po pewnym czasie serwer WWW wyśle żądanie o ponowne przesłanie zagubionego pakietu. / NIE
+- Po pewnym czasie warstwa transportowa ponownie wyśle pakiet. / TAK
+- Po pewnym czasie przeglądarka WWW ponownie wyśle pakiet. / NIE
+
+## 24. Załóżmy, że routery A i B są bezpośrednio połączone i wykorzystują algorytm RIP. Tablica routingu A zawiera wpis, że istnieje ścieżka długości 5 do routera X, na której pierwszym krokiem jest router B. Router B wysyła do A informację, że jego obecna trasa do X wynosi 10. Co zrobi router A?
+- Zignoruje tę informację, gdyż jego obecna trasa do X jest lepsza. / NIE
+- Powyższa informacja w ogóle nie dotrze do A ze względu na technikę dzielenia horyzontu. / NIE
+- Zaktualizuje swój wpis, zmieniając odległość do routera X na 9. / NIE
+- Zaktualizuje swój wpis, zmieniając odległość do routera X na 11. / TAK
+
+## 25. Tylko jedna poprawna odpowiedź. W pewnym typie Ethernetu wysłanie pojedynczego bitu zajmuje 1/10 mikrosekundy, ramki mają po 20 bajtów, sygnał rozchodzi się z prędkością 100 000 km/s. Jaka jest maksymalna odległość między dwoma komputerami umożliwiająca działanie CSMA/CD?
+- 320 m / NIE
+- 800 m / TAK
+- 1600 m / NIE
+- 32 m / NIE
+
+## 26. Kryptograficzna funkcja skrótu (fingerprint) określona jest funkcją h. Jakie są pożądane właściwości takiej funkcji?
+- Funkcja h powinna być efektywnie obliczalna. / TAK
+- Funkcja h powinna być bijekcją. / NIE
+- Dla dowolnego x znalezienie y ≠ x spełniającego h(x) = h(y) jest obliczeniowo trudne. / TAK
+- Funkcja h⁻¹ powinna być efektywnie obliczalna. / NIE
+
+## 27. Komputer (nadawca) wysyła wiadomość do komputera (odbiorcy) leżącego w innej sieci. Co znajdzie się w ramce w momencie jej wysyłania przez komputer?
+- Adres MAC karty sieciowej odbiorcy. / NIE
+- Adres MAC karty sieciowej nadawcy. / TAK
+- Adres MAC karty sieciowej bramy domyślnej. / TAK
+- Adres MAC karty przełącznika sieciowego. / NIE
+
+## 28. Jakie techniki pomagają w walce ze spamem?
+- phishing / NIE
+- ICMP traceback / NIE
+- greylisting / TAK
+- filtry bayesowskie / TAK
+
+## 29. Komputerowi został przypisany adres IP równy 10.20.30.255/23, a brama domyślna 10.20.32.200. Zaznacz prawdziwe zdania.
+- Komputer nie będzie mógł się komunikować, gdyż ma przypisany adres rozgłoszeniowy. / NIE
+- Komputer będzie mógł komunikować się tylko z komputerami leżącymi w jego podsieci. / TAK
+- Komputer nie będzie mógł się komunikować, gdyż ma przypisany adres sieci. / NIE
+- Komputer będzie mógł komunikować się bezpośrednio w swojej podsieci, a z innymi za pośrednictwem bramy domyślnej. / NIE
+
+## 30. Który z poniższych protokołów działa w warstwie transportowej?
+- DNS / NIE
+- TCP / TAK
+- ICMP / NIE
+- FTP / NIE
+
+## 31. Tylko jedna poprawna odpowiedź. Karta sieciowa ma adres 172.16.2.100/25, brama domyślna 172.16.2.1, pamięć ARP pusta. Co nastąpi jako pierwsze, jeśli komputer chce wysłać ramkę do adresu 172.16.2.200/25?
+- Komputer roześle (na adres rozgłoszeniowy) zapytanie ARP o adres 172.16.2.1 / TAK
+- Komputer roześle (na adres rozgłoszeniowy) zapytanie ARP o adres 172.16.2.200 / NIE
+- Ramka nie zostanie wysłana, a aplikacja otrzyma komunikat ICMP redirect. / NIE
+- Komputer wyśle ramkę do przełącznika, a przełącznik wyśle ją do odpowiedniego adresu. / NIE
+
+## 32. Tylko jedna poprawna odpowiedź. Jedna czwarta listów to spam. Słowo „zalicz" występuje w 25% maili niebędących spamem i w 50% maili będących spamem. Dostajemy losowy mail i okazuje się, że jest w nim słowo „zalicz". Jakie jest prawdopodobieństwo, że to spam?
+- 1/4 / NIE
+- 4/7 / NIE
+- 2/5 / TAK
+- 1/2 / NIE
+
+## 33. Które zdania dotyczące szyfrowania są prawdziwe?
+- Algorytmy szyfrowania asymetrycznego są zazwyczaj wolniejsze niż algorytmy szyfrowania symetrycznego. / TAK
+- W algorytmach szyfrowania symetrycznego wiadomość szyfrujemy i deszyfrujemy za pomocą tego samego klucza. / TAK
+- RSA jest szyfrem monoalfabetycznym. / NIE
+- One-time pad jest szyfrem monoalfabetycznym. / NIE
+
+## 34. Zakres adresów 123.0.0.0/18 ma zostać podzielony na 6 rozłącznych sieci, tak żeby każdy adres był w dokładnie jednej z nich. Co można powiedzieć o wielkościach tych podsieci?
+- Możliwe jest stworzenie podsieci o masce /22 / TAK
+- Możliwe jest stworzenie podsieci o masce /19 / TAK
+- Możliwe jest stworzenie podsieci o masce /24 / NIE
+- Możliwe jest stworzenie podsieci o masce /23 / TAK
+
+## 35. Efektem wywołania na gnieździe TCP funkcji bind() jest:
+- wysłanie segmentu z ustawioną flagą SYN. / NIE
+- wysłanie segmentu z ustawioną flagą RST. / NIE
+- wywołanie funkcji bind() jest dozwolone tylko w przypadku gniazd UDP. / NIE
+- wysłanie segmentu z ustawioną flagą ACK. / NIE
+
+## 36. Algorytm Nagle'a:
+- Jest wyłączany w przypadku niektórych usług interaktywnych. / TAK
+- Stosowany jest w protokole ARP. / NIE
+- Jest wyłączany w przypadku połączeń SMTP. / NIE
+- Stosowany jest w protokole UDP. / NIE
+
+## 37. Które z poniższych adresów są dopuszczalnymi formami zapisu adresu IPv6 0fed:0000:0000:0000:f000:0000:0000:0001?
+- 0fed::f000:0001 / NIE
+- fed:0:0:0:f:0:0:1 / NIE
+- fed:0:0:0:f000:0:0:1 / TAK
+- 0fed:0000:0000:0000:f000:0000:0000:1 / TAK
+
+## 38. Adres 203.0.1.191 jest adresem rozgłoszeniowym przy masce podsieci:
+- /28 / TAK
+- /25 / NIE
+- /26 / TAK
+- /24 / NIE
+
+## 39. Zaznacz prawdziwe zdania.
+- Jeśli łączymy mostem dwie sieci o różnych MTU, to most będzie w razie potrzeby dzielił ramki na mniejsze części. / NIE
+- Przełącznik sieciowy pozwala na redukowanie domen kolizji. / TAK
+- Przełączenie karty sieciowej w tryb nasłuchu (promiscuous mode) umożliwia podsłuchiwanie całego ruchu sieciowego w sieci lokalnej, nawet jeśli sieć wykorzystuje przełączniki. / NIE
+- Koncentrator pozwala na redukowanie domen kolizji. / NIE
+
+## 40. Wynoszące 15 ograniczenie algorytmu RIP na maksymalną odległość między dwoma routerami:
+- Umożliwia usunięcie duplikatów pakietów z sieci. / NIE
+- Powoduje, że algorytmu tego nie można stosować w sieciach o średnicy równej 20. / TAK
+- W niektórych przypadkach pomaga pozbyć się pętli w routingu. / TAK
+- Zabezpiecza przed otrzymywaniem spamu. / NIE
+
+## 280. Tylko jedna poprawna odpowiedź. Przy stosowaniu sumy kontrolnej CRC opartej o wielomian x²+1 do wiadomości 100001 zostanie dołączona suma kontrolna:
+- 11 / TAK
+- 01 / NIE
+- 10 / NIE
+- 1 / NIE
+
+## 290. Zakres adresów 123.0.0.0/18 ma zostać podzielony na 6 rozłącznych sieci, tak żeby każdy adres był w dokładnie jednej z nich. Co można powiedzieć o wielkościach tych podsieci?
+- Możliwe jest stworzenie podsieci o masce /22 / TAK
+- Możliwe jest stworzenie podsieci o masce /24 / NIE
+- Możliwe jest stworzenie podsieci o masce /19 / TAK
+- Możliwe jest stworzenie podsieci o masce /23 / TAK
+
+## 300. W jakich warstwach używane są poniższe mechanizmy?
+- Nawiązywanie połączenia stosowane jest w warstwie transportowej. / TAK
+- Typ MIME stosowany jest w warstwie transportowej. / NIE
+- Routing stosowany jest w warstwie aplikacji. / NIE
+- Suma CRC wykorzystywana jest w warstwie łącza danych. / TAK
+
+## 310. Protokół ICMP.
+- Umożliwia działanie programowi ping. / TAK
+- Umożliwia kontrolę przeciążeń. / NIE
+- Wykorzystuje port 23 do komunikacji. / NIE
+- Wykorzystuje port 63 do komunikacji. / NIE
+
+## 320. Tylko jedna poprawna odpowiedź. Klient DNS pyta serwer DNS o nazwę domeny skojarzoną z adresem 10.20.30.40.
+- Klient wyśle zapytanie o rekord A związany z domeną 10.20.30.40 / NIE
+- Klient wyśle zapytanie o rekord A związany z domeną 10.20.30.40.in-addr.arpa / NIE
+- Klient wyśle zapytanie o rekord PTR związany z domeną 40.30.20.10.in-addr.arpa / TAK
+- Klient wyśle zapytanie o rekord PTR związany z domeną 10.20.30.40.in-addr.arpa / NIE
