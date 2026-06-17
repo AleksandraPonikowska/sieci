@@ -282,8 +282,7 @@
 - komputery przekazuja sobie token, by uzyskac dostep do kanalu / TAK
 - wykorzystuje protokol CSMA/CA / NIE
 
-## 9. Tylko 1 poprawna odpowiedz
-Przy stosowaniu sumy kontrolnej crc opartej o wielomian x^2 + 1 do wiadomosci 100001 zostanie dolaczona suma kontrolna:
+## 9. Tylko 1 poprawna odpowiedz: Przy stosowaniu sumy kontrolnej crc opartej o wielomian x^2 + 1 do wiadomosci 100001 zostanie dolaczona suma kontrolna:
 - 1 / NIE
 - 10 / NIE
 - 11 / TAK
