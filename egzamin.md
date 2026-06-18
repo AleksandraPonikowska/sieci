@@ -625,7 +625,7 @@
 ## 22. Załóżmy, że interfejs enp0s0 jest już aktywny. Po wpisaniu polecenia `ip addr add 192.0.0.2/16 dev enp0s0` następujące ustawienia zostaną skonfigurowane dla sieci podłączonej do interfejsu enp0s0:
 - Adres rozgłoszeniowy zostanie ustawiony na 192.0.0.255. / NIE
 - Brama domyślna zostanie ustawiona na 192.0.0.0. / NIE
-- Adres rozgłoszeniowy zostanie ustawiony na 192.0.255.255. / NIE
+- Adres rozgłoszeniowy zostanie ustawiony na 192.0.255.255. / TAK
 - Brama domyślna zostanie ustawiona na 192.0.0.1. / NIE
 
 ## 23. Podczas modelowego kończenia połączenia w protokole TCP:
